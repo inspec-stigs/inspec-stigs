@@ -24,17 +24,25 @@ To ensure all processes can be audited, even those which start prior to the audi
 
 kernel /vmlinuz-version ro vga=ext root=/dev/VolGroup00/LogVol00 rhgb quiet audit=1
 
-UEFI systems may prepend "/boot" to the "/vmlinuz-version" argument. 
+UEFI systems may prepend "/boot" to the "/vmlinuz-version" argument.
 '
   tag checktext: '
-Inspect the kernel boot arguments (which follow the word "kernel") in "/etc/grub.conf". If they include "audit=1", then auditing is enabled at boot time. 
+Inspect the kernel boot arguments (which follow the word "kernel") in "/etc/grub.conf". If they include "audit=1", then auditing is enabled at boot time.
 
 If auditing is not enabled at boot time, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38438
+  describe package('audit') do
+    it { should be_installed }
+  end
+  describe service('auditd') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+  describe grub_conf('/etc/grub.conf') do
+    its('kernel') { should include 'audit=1' }
+  end
+# END_DESCRIBE V-38438
+
 end

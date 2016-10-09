@@ -23,17 +23,19 @@ An account has root authority if it has a UID of 0. Multiple accounts with a UID
 If any account other than root has a UID of 0, this misconfiguration should be investigated and the accounts other than root should be removed or have their UID changed.
 '
   tag checktext: '
-To list all password file entries for accounts with UID 0, run the following command: 
+To list all password file entries for accounts with UID 0, run the following command:
 
 # awk -F: \'($3 == 0) {print}\' /etc/passwd
 
-This should print only one line, for the user root. 
+This should print only one line, for the user root.
 If any account other than root has a UID of 0, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38500
+  describe passwd.uids(0) do
+    its('users') { should cmp 'root' }
+    its('count') { should eq 1 }
+  end
+# END_DESCRIBE V-38500
+
 end

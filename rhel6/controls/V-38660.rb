@@ -21,22 +21,25 @@ Earlier versions of SNMP are considered insecure, as they potentially allow unau
   tag version: 'RHEL-06-000340'
   tag ruleid: 'SV-50461r1_rule'
   tag fixtext: '
-Edit "/etc/snmp/snmpd.conf", removing any references to "v1", "v2c", or "com2sec". Upon doing that, restart the SNMP service: 
+Edit "/etc/snmp/snmpd.conf", removing any references to "v1", "v2c", or "com2sec". Upon doing that, restart the SNMP service:
 
 # service snmpd restart
 '
   tag checktext: '
-To ensure only SNMPv3 or newer is used, run the following command: 
+To ensure only SNMPv3 or newer is used, run the following command:
 
 # grep \'v1\|v2c\|com2sec\' /etc/snmp/snmpd.conf | grep -v \'^#\'
 
-There should be no output. 
+There should be no output.
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38660
+  tag 'snmp','snmpd.conf'
+  only_if { file('/etc/snmp/snmpd.conf').exist? }
+  describe command("grep 'v1\\|v2c\\|com2sec' /etc/snmp/snmpd.conf | grep -v '^#'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38660
+
 end

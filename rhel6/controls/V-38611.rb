@@ -20,24 +20,26 @@ SSH trust relationships mean a compromise on one host can allow an attacker to m
   tag version: 'RHEL-06-000234'
   tag ruleid: 'SV-50412r1_rule'
   tag fixtext: '
-SSH can emulate the behavior of the obsolete rsh command in allowing users to enable insecure access to their accounts via ".rhosts" files. 
+SSH can emulate the behavior of the obsolete rsh command in allowing users to enable insecure access to their accounts via ".rhosts" files.
 
-To ensure this behavior is disabled, add or correct the following line in "/etc/ssh/sshd_config": 
+To ensure this behavior is disabled, add or correct the following line in "/etc/ssh/sshd_config":
 
 IgnoreRhosts yes
 '
   tag checktext: '
-To determine how the SSH daemon\'s "IgnoreRhosts" option is set, run the following command: 
+To determine how the SSH daemon\'s "IgnoreRhosts" option is set, run the following command:
 
 # grep -i IgnoreRhosts /etc/ssh/sshd_config
 
-If no line, a commented line, or a line indicating the value "yes" is returned, then the required value is set. 
+If no line, a commented line, or a line indicating the value "yes" is returned, then the required value is set.
 If the required value is not set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38611
+  tag 'sshd','IgnoreRhosts'
+  describe sshd_config do
+    its('IgnoreRhosts') { should eq 'yes' }
+  end
+# END_DESCRIBE V-38611
+
 end

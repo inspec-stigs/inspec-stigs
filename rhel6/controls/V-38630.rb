@@ -20,7 +20,7 @@ Enabling idle activation of the screen saver ensures the screensaver will be act
   tag version: 'RHEL-06-000258'
   tag ruleid: 'SV-50431r3_rule'
   tag fixtext: '
-Run the following command to activate the screensaver in the GNOME desktop after a period of inactivity: 
+Run the following command to activate the screensaver in the GNOME desktop after a period of inactivity:
 
 # gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
@@ -30,18 +30,21 @@ Run the following command to activate the screensaver in the GNOME desktop after
   tag checktext: '
 If the GConf2 package is not installed, this is not applicable.
 
-To check the screensaver mandatory use status, run the following command: 
+To check the screensaver mandatory use status, run the following command:
 
 $ gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/idle_activation_enabled
 
-If properly configured, the output should be "true". 
+If properly configured, the output should be "true".
 
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38630
+  tag 'gconf','GConf2','screensaver','idle'
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/idle_activation_enabled') do
+    its('stdout') { should match "true" }
+  end
+# END_DESCRIBE V-38630
+
 end

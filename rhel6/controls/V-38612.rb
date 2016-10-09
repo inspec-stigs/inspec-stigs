@@ -20,24 +20,26 @@ SSH trust relationships mean a compromise on one host can allow an attacker to m
   tag version: 'RHEL-06-000236'
   tag ruleid: 'SV-50413r1_rule'
   tag fixtext: '
-SSH\'s cryptographic host-based authentication is more secure than ".rhosts" authentication, since hosts are cryptographically authenticated. However, it is not recommended that hosts unilaterally trust one another, even within an organization. 
+SSH\'s cryptographic host-based authentication is more secure than ".rhosts" authentication, since hosts are cryptographically authenticated. However, it is not recommended that hosts unilaterally trust one another, even within an organization.
 
-To disable host-based authentication, add or correct the following line in "/etc/ssh/sshd_config": 
+To disable host-based authentication, add or correct the following line in "/etc/ssh/sshd_config":
 
 HostbasedAuthentication no
 '
   tag checktext: '
-To determine how the SSH daemon\'s "HostbasedAuthentication" option is set, run the following command: 
+To determine how the SSH daemon\'s "HostbasedAuthentication" option is set, run the following command:
 
 # grep -i HostbasedAuthentication /etc/ssh/sshd_config
 
-If no line, a commented line, or a line indicating the value "no" is returned, then the required value is set. 
+If no line, a commented line, or a line indicating the value "no" is returned, then the required value is set.
 If the required value is not set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38612
+  tag 'sshd','HostbasedAuthentication'
+  describe sshd_config do
+    its('HostbasedAuthentication') { should eq 'no' }
+  end
+# END_DESCRIBE V-38612
+
 end

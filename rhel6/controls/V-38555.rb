@@ -20,7 +20,7 @@ The "iptables" service provides the system\'s host-based firewalling capability 
   tag version: 'RHEL-06-000113'
   tag ruleid: 'SV-50356r2_rule'
   tag fixtext: '
-The "iptables" service can be enabled with the following commands: 
+The "iptables" service can be enabled with the following commands:
 
 # chkconfig iptables on
 # service iptables start
@@ -28,11 +28,11 @@ The "iptables" service can be enabled with the following commands:
   tag checktext: '
 If the system is a cross-domain system, this is not applicable.
 
-Run the following command to determine the current status of the "iptables" service: 
+Run the following command to determine the current status of the "iptables" service:
 
 # service iptables status
 
-If the service is not running, it should return the following: 
+If the service is not running, it should return the following:
 
 iptables: Firewall is not running.
 
@@ -40,9 +40,11 @@ iptables: Firewall is not running.
 If the service is not running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38555
+  describe service('iptables') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+# END_DESCRIBE V-38555
+
 end

@@ -20,7 +20,7 @@ This setting will cause the system greeting banner to be used for FTP connection
   tag version: 'RHEL-06-000348'
   tag ruleid: 'SV-50400r2_rule'
   tag fixtext: '
-Edit the vsftpd configuration file, which resides at "/etc/vsftpd/vsftpd.conf" by default. Add or correct the following configuration options. 
+Edit the vsftpd configuration file, which resides at "/etc/vsftpd/vsftpd.conf" by default. Add or correct the following configuration options.
 
 banner_file=/etc/issue
 
@@ -29,11 +29,11 @@ Restart the vsftpd daemon.
 # service vsftpd restart
 '
   tag checktext: '
-To verify this configuration, run the following command: 
+To verify this configuration, run the following command:
 
 grep "banner_file" /etc/vsftpd/vsftpd.conf
 
-The output should show the value of "banner_file" is set to "/etc/issue", an example of which is shown below. 
+The output should show the value of "banner_file" is set to "/etc/issue", an example of which is shown below.
 
 # grep "banner_file" /etc/vsftpd/vsftpd.conf
 banner_file=/etc/issue
@@ -42,9 +42,11 @@ banner_file=/etc/issue
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38599
+  only_if { file('/etc/vsftpd/vsftpd.conf').exist? }
+  describe parse_config_file('/etc/vsftpd/vsftpd.conf') do
+    its('banner_file') { should eq '/etc/issue' }
+  end
+# END_DESCRIBE V-38599
+
 end

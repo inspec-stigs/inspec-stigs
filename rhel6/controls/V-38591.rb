@@ -20,12 +20,12 @@ The "rsh-server" package provides several obsolete and insecure network services
   tag version: 'RHEL-06-000213'
   tag ruleid: 'SV-50392r1_rule'
   tag fixtext: '
-The "rsh-server" package can be uninstalled with the following command: 
+The "rsh-server" package can be uninstalled with the following command:
 
 # yum erase rsh-server
 '
   tag checktext: '
-Run the following command to determine if the "rsh-server" package is installed: 
+Run the following command to determine if the "rsh-server" package is installed:
 
 # rpm -q rsh-server
 
@@ -33,9 +33,10 @@ Run the following command to determine if the "rsh-server" package is installed:
 If the package is installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38591
+  describe package('rsh-server') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38591
+
 end

@@ -20,24 +20,26 @@ Approved algorithms should impart some level of confidence in their implementati
   tag version: 'RHEL-06-000243'
   tag ruleid: 'SV-50418r1_rule'
   tag fixtext: '
-Limit the ciphers to those algorithms which are FIPS-approved. Counter (CTR) mode is also preferred over cipher-block chaining (CBC) mode. The following line in "/etc/ssh/sshd_config" demonstrates use of FIPS-approved ciphers: 
+Limit the ciphers to those algorithms which are FIPS-approved. Counter (CTR) mode is also preferred over cipher-block chaining (CBC) mode. The following line in "/etc/ssh/sshd_config" demonstrates use of FIPS-approved ciphers:
 
 Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc
 
 The man page "sshd_config(5)" contains a list of supported ciphers.
 '
   tag checktext: '
-Only FIPS-approved ciphers should be used. To verify that only FIPS-approved ciphers are in use, run the following command: 
+Only FIPS-approved ciphers should be used. To verify that only FIPS-approved ciphers are in use, run the following command:
 
 # grep Ciphers /etc/ssh/sshd_config
 
-The output should contain only those ciphers which are FIPS-approved, namely, the AES and 3DES ciphers. 
+The output should contain only those ciphers which are FIPS-approved, namely, the AES and 3DES ciphers.
 If that is not the case, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38617
+  tag 'sshd','Ciphers'
+  describe sshd_config do
+    its('Ciphers') { should eq 'aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc' }
+  end
+# END_DESCRIBE V-38617
+
 end

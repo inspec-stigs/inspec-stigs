@@ -20,7 +20,7 @@ Enabling the activation of the screen lock after an idle period ensures password
   tag version: 'RHEL-06-000259'
   tag ruleid: 'SV-50439r3_rule'
   tag fixtext: '
-Run the following command to activate locking of the screensaver in the GNOME desktop when it is activated: 
+Run the following command to activate locking of the screensaver in the GNOME desktop when it is activated:
 
 # gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
@@ -28,19 +28,22 @@ Run the following command to activate locking of the screensaver in the GNOME de
 --set /apps/gnome-screensaver/lock_enabled true
 '
   tag checktext: '
-If the GConf2 package is not installed, this is not applicable. 
+If the GConf2 package is not installed, this is not applicable.
 
-To check the status of the idle screen lock activation, run the following command: 
+To check the status of the idle screen lock activation, run the following command:
 
 $ gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/lock_enabled
 
-If properly configured, the output should be "true". 
+If properly configured, the output should be "true".
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38638
+  tag 'gconf','GConf2','screensaver','lock','idle'
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/lock_enabled') do
+    its('stdout') { should match "true" }
+  end
+# END_DESCRIBE V-38638
+
 end

@@ -20,18 +20,18 @@ Packet signing can prevent man-in-the-middle attacks which modify SMB packets in
   tag version: 'RHEL-06-000272'
   tag ruleid: 'SV-50457r1_rule'
   tag fixtext: '
-To require samba clients running "smbclient" to use packet signing, add the following to the "[global]" section of the Samba configuration file in "/etc/samba/smb.conf": 
+To require samba clients running "smbclient" to use packet signing, add the following to the "[global]" section of the Samba configuration file in "/etc/samba/smb.conf":
 
 client signing = mandatory
 
 Requiring samba clients such as "smbclient" to use packet signing ensures they can only communicate with servers that support packet signing.
 '
   tag checktext: '
-To verify that Samba clients running smbclient must use packet signing, run the following command: 
+To verify that Samba clients running smbclient must use packet signing, run the following command:
 
 # grep signing /etc/samba/smb.conf
 
-The output should show: 
+The output should show:
 
 client signing = mandatory
 
@@ -39,9 +39,12 @@ client signing = mandatory
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38656
+  tag 'samba','smbclient','smb.conf','client_signing'
+  only_if { file('/etc/samba/smb.conf').exist? }
+  describe parse_config_file('/etc/samba/smb.conf') do
+    its('global') { should include 'client signing' => 'mandatory' }
+  end
+# END_DESCRIBE V-38656
+
 end

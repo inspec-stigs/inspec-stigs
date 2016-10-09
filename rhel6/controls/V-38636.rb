@@ -20,14 +20,14 @@ The total storage for audit log files must be large enough to retain log informa
   tag version: 'RHEL-06-000159'
   tag ruleid: 'SV-50437r1_rule'
   tag fixtext: '
-Determine how many log files "auditd" should retain when it rotates logs. Edit the file "/etc/audit/auditd.conf". Add or modify the following line, substituting [NUMLOGS] with the correct value: 
+Determine how many log files "auditd" should retain when it rotates logs. Edit the file "/etc/audit/auditd.conf". Add or modify the following line, substituting [NUMLOGS] with the correct value:
 
 num_logs = [NUMLOGS]
 
 Set the value to 5 for general-purpose systems. Note that values less than 2 result in no log rotation.
 '
   tag checktext: '
-Inspect "/etc/audit/auditd.conf" and locate the following line to determine how many logs the system is configured to retain after rotation: "# grep num_logs /etc/audit/auditd.conf" 
+Inspect "/etc/audit/auditd.conf" and locate the following line to determine how many logs the system is configured to retain after rotation: "# grep num_logs /etc/audit/auditd.conf"
 
 num_logs = 5
 
@@ -35,9 +35,11 @@ num_logs = 5
 If the overall system log file(s) retention hasn\'t been properly set up, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38636
+  tag 'auditd','auditd.conf','num_logs'
+  describe parse_config_file("/etc/audit/auditd.conf") do
+    its("num_logs") { should cmp '5' }
+  end
+# END_DESCRIBE V-38636
+
 end

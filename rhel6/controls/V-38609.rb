@@ -20,7 +20,7 @@ Disabling the "tftp" service ensures the system is not acting as a tftp server, 
   tag version: 'RHEL-06-000223'
   tag ruleid: 'SV-50410r2_rule'
   tag fixtext: '
-The "tftp" service should be disabled. The "tftp" service can be disabled with the following command: 
+The "tftp" service should be disabled. The "tftp" service can be disabled with the following command:
 
 # chkconfig tftp off
 '
@@ -40,9 +40,12 @@ error reading information on service tftp: No such file or directory
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38609
+  tag 'tftp','service'
+  describe service('tftp') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+  end
+# END_DESCRIBE V-38609
+
 end

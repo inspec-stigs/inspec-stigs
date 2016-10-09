@@ -23,17 +23,19 @@ Unique usernames allow for accountability on the system.
 Change usernames, or delete accounts, so each has a unique name.
 '
   tag checktext: '
-Run the following command to check for duplicate account names: 
+Run the following command to check for duplicate account names:
 
 # pwck -rq
 
-If there are no duplicate names, no line will be returned. 
+If there are no duplicate names, no line will be returned.
 If a line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38683
+  tag 'users','passwd'
+  describe command('pwck -rq') do
+    its('stdout') { should eq '' }
+  end
+# END_DESCRIBE V-38683
+
 end

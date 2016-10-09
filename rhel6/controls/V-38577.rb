@@ -20,12 +20,12 @@ Using a stronger hashing algorithm makes password cracking attacks more difficul
   tag version: 'RHEL-06-000064'
   tag ruleid: 'SV-50378r1_rule'
   tag fixtext: '
-In "/etc/libuser.conf", add or correct the following line in its "[defaults]" section to ensure the system will use the SHA-512 algorithm for password hashing: 
+In "/etc/libuser.conf", add or correct the following line in its "[defaults]" section to ensure the system will use the SHA-512 algorithm for password hashing:
 
 crypt_style = sha512
 '
   tag checktext: '
-Inspect "/etc/libuser.conf" and ensure the following line appears in the "[default]" section: 
+Inspect "/etc/libuser.conf" and ensure the following line appears in the "[default]" section:
 
 crypt_style = sha512
 
@@ -33,9 +33,10 @@ crypt_style = sha512
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38577
+  describe parse_config_file('/etc/libuser.conf') do
+   its('defaults') { should include('crypt_style' => 'sha512') }
+  end
+# END_DESCRIBE V-38577
+
 end

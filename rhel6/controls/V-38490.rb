@@ -20,23 +20,32 @@ USB storage devices such as thumb drives can be used to introduce unauthorized s
   tag version: 'RHEL-06-000503'
   tag ruleid: 'SV-50291r4_rule'
   tag fixtext: '
-To prevent USB storage devices from being used, configure the kernel module loading system to prevent automatic loading of the USB storage driver. To configure the system to prevent the "usb-storage" kernel module from being loaded, add the following line to a file in the directory "/etc/modprobe.d": 
+To prevent USB storage devices from being used, configure the kernel module loading system to prevent automatic loading of the USB storage driver. To configure the system to prevent the "usb-storage" kernel module from being loaded, add the following line to a file in the directory "/etc/modprobe.d":
 
 install usb-storage /bin/true
 
 This will prevent the "modprobe" program from loading the "usb-storage" module, but will not prevent an administrator (or another program) from using the "insmod" program to load the module manually.
 '
   tag checktext: '
-If the system is configured to prevent the loading of the "usb-storage" kernel module, it will contain lines inside any file in "/etc/modprobe.d" or the deprecated"/etc/modprobe.conf". These lines instruct the module loading system to run another program (such as "/bin/true") upon a module "install" event. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf": 
+If the system is configured to prevent the loading of the "usb-storage" kernel module, it will contain lines inside any file in "/etc/modprobe.d" or the deprecated"/etc/modprobe.conf". These lines instruct the module loading system to run another program (such as "/bin/true") upon a module "install" event. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf":
 
 $ grep -r usb-storage /etc/modprobe.conf /etc/modprobe.d
 
 If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38490
+  describe kernel_module('usb-storage') do
+    it { should_not be_loaded }
+  end
+  if file('/etc/modprobe.conf').exist?
+    check_files = '/etc/modprobe.conf /etc/modprobe.d'
+  else
+    check_files = '/etc/modprobe.d'
+  end
+  describe command("grep -r 'install usb-storage /bin/true' #{check_files}") do
+    its('stdout') { should_not eq '' }
+  end
+# END_DESCRIBE V-38490
+
 end

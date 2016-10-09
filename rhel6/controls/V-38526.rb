@@ -20,11 +20,11 @@ Accepting "secure" ICMP redirects (from those gateways listed as default gateway
   tag version: 'RHEL-06-000086'
   tag ruleid: 'SV-50327r2_rule'
   tag fixtext: '
-To set the runtime status of the "net.ipv4.conf.all.secure_redirects" kernel parameter, run the following command: 
+To set the runtime status of the "net.ipv4.conf.all.secure_redirects" kernel parameter, run the following command:
 
 # sysctl -w net.ipv4.conf.all.secure_redirects=0
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 net.ipv4.conf.all.secure_redirects = 0
 '
@@ -40,9 +40,10 @@ $ grep net.ipv4.conf.all.secure_redirects /etc/sysctl.conf
 If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38526
+  describe kernel_parameter('net.ipv4.conf.all.secure_redirects') do
+    its('value') { should eq 0 }
+  end
+# END_DESCRIBE V-38526
+
 end

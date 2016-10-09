@@ -13,7 +13,7 @@ control 'V-38456' do
   desc '
 Ensuring that "/var" is mounted on its own partition enables the setting of more restrictive mount options. This helps protect system services such as daemons or other programs which use it. It is not uncommon for the "/var" directory to contain world-writable directories, installed by other software packages.
 '
-  tag 'stig','V-38456'
+  tag 'stig','V-38456','mount','var'
   tag severity: 'low'
   tag checkid: 'C-46011r2_chk'
   tag fixid: 'F-43401r2_fix'
@@ -23,17 +23,18 @@ Ensuring that "/var" is mounted on its own partition enables the setting of more
 The "/var" directory is used by daemons and other system services to store frequently-changing data. Ensure that "/var" has its own partition or logical volume at installation time, or migrate it using LVM.
 '
   tag checktext: '
-Run the following command to determine if "/var" is on its own partition or logical volume: 
+Run the following command to determine if "/var" is on its own partition or logical volume:
 
 $ mount | grep "on /var "
 
-If "/var" has its own partition or volume group, a line will be returned. 
+If "/var" has its own partition or volume group, a line will be returned.
 If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38456
+  describe mount('/var') do
+    it { should be_mounted }
+  end
+# END_DESCRIBE V-38456
+
 end

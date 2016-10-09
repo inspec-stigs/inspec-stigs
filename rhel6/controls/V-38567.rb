@@ -37,12 +37,52 @@ Run the following command to verify entries in the audit rules for all programs 
 
 $ sudo grep path /etc/audit/audit.rules
 
-It should be the case that all relevant setuid / setgid programs have a line in the audit rules. If that is not the case, this is a finding. 
+It should be the case that all relevant setuid / setgid programs have a line in the audit rules. If that is not the case, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38567
+  setuid_tools = [
+    "/sbin/mount.nfs",
+    "/sbin/unix_chkpwd",
+    "/sbin/netreport",
+    "/sbin/pam_timestamp_check",
+    "/usr/libexec/pt_chown",
+    "/usr/libexec/openssh/ssh-keysign",
+    "/usr/libexec/polkit-1/polkit-agent-helper-1",
+    "/usr/libexec/abrt-action-install-debuginfo-to-abrt-cache",
+    "/usr/libexec/utempter/utempter",
+    "/usr/sbin/postqueue",
+    "/usr/sbin/userhelper",
+    "/usr/sbin/usernetctl",
+    "/usr/sbin/postdrop",
+    "/usr/bin/chage",
+    "/usr/bin/staprun",
+    "/usr/bin/screen",
+    "/usr/bin/pkexec",
+    "/usr/bin/locate",
+    "/usr/bin/sudo",
+    "/usr/bin/at",
+    "/usr/bin/chfn",
+    "/usr/bin/chsh",
+    "/usr/bin/newgrp",
+    "/usr/bin/ssh-agent",
+    "/usr/bin/wall",
+    "/usr/bin/write",
+    "/usr/bin/crontab",
+    "/usr/bin/passwd",
+    "/usr/bin/gpasswd",
+    "/lib64/dbus-1/dbus-daemon-launch-helper",
+    "/bin/umount",
+    "/bin/mount",
+    "/bin/ping",
+    "/bin/su",
+    "/bin/ping6",
+  ]
+  setuid_tools.each do |file|
+    describe auditd_rules do
+      its('lines') { should include("-a always,exit -S all -F path=#{file} -F perm=x -F auid>=500 -F auid!=-1 -F key=privileged") }
+    end
+  end
+# END_DESCRIBE V-38567
+
 end

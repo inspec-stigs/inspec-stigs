@@ -20,7 +20,7 @@ Any unnecessary network stacks - including IPv6 - should be disabled, to reduce 
   tag version: 'RHEL-06-000098'
   tag ruleid: 'SV-50347r2_rule'
   tag fixtext: '
-To prevent the IPv6 kernel module ("ipv6") from binding to the IPv6 networking stack, add the following line to "/etc/modprobe.d/disabled.conf" (or another file in "/etc/modprobe.d"): 
+To prevent the IPv6 kernel module ("ipv6") from binding to the IPv6 networking stack, add the following line to "/etc/modprobe.d/disabled.conf" (or another file in "/etc/modprobe.d"):
 
 options ipv6 disable=1
 
@@ -29,11 +29,11 @@ This permits the IPv6 module to be loaded (and thus satisfy other modules that d
   tag checktext: '
 If the system uses IPv6, this is not applicable.
 
-If the system is configured to disable the "ipv6" kernel module, it will contain a line of the form: 
+If the system is configured to disable the "ipv6" kernel module, it will contain a line of the form:
 
 options ipv6 disable=1
 
-Such lines may be inside any file in "/etc/modprobe.d" or the deprecated "/etc/modprobe.conf". This permits insertion of the IPv6 kernel module (which other parts of the system expect to be present), but otherwise keeps it inactive. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf": 
+Such lines may be inside any file in "/etc/modprobe.d" or the deprecated "/etc/modprobe.conf". This permits insertion of the IPv6 kernel module (which other parts of the system expect to be present), but otherwise keeps it inactive. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf":
 
 $ grep -r ipv6 /etc/modprobe.conf /etc/modprobe.d
 
@@ -41,9 +41,9 @@ $ grep -r ipv6 /etc/modprobe.conf /etc/modprobe.d
 If the IPv6 kernel module is not disabled, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38546
+  # not sure we really want this?
+  # hard to test for intention...
+# END_DESCRIBE V-38546
+
 end

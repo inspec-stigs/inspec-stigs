@@ -11,7 +11,7 @@ control 'V-54381' do
   impact 0.5
   title 'The audit system must switch the system to single-user mode when available audit storage volume becomes dangerously low.'
   desc '
-Administrators should be made aware of an inability to record audit records. If a separate partition or logical volume of adequate size is used, running low on space for audit records should never occur. 
+Administrators should be made aware of an inability to record audit records. If a separate partition or logical volume of adequate size is used, running low on space for audit records should never occur.
 '
   tag 'stig','V-54381'
   tag severity: 'medium'
@@ -24,19 +24,22 @@ The "auditd" service can be configured to take an action when disk space is runn
 
 admin_space_left_action = [ACTION]
 
-Set this value to "single" to cause the system to switch to single-user mode for corrective action. Acceptable values also include "suspend" and "halt". For certain systems, the need for availability outweighs the need to log all actions, and a different setting should be determined. Details regarding all possible values for [ACTION] are described in the "auditd.conf" man page. 
+Set this value to "single" to cause the system to switch to single-user mode for corrective action. Acceptable values also include "suspend" and "halt". For certain systems, the need for availability outweighs the need to log all actions, and a different setting should be determined. Details regarding all possible values for [ACTION] are described in the "auditd.conf" man page.
 '
   tag checktext: '
 Inspect "/etc/audit/auditd.conf" and locate the following line to determine if the system is configured to either suspend, switch to single-user mode, or halt when disk space has run low:
 
 admin_space_left_action single
 
-If the system is not configured to switch to single-user mode for corrective action, this is a finding. 
+If the system is not configured to switch to single-user mode for corrective action, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-54381
+  tag 'auditd','auditd.conf','admin_space_left_action'
+  describe parse_config_file("/etc/audit/auditd.conf") do
+    its("admin_space_left_action") { should cmp 'single' }
+  end
+
+# END_DESCRIBE V-54381
+
 end

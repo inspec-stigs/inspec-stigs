@@ -20,18 +20,18 @@ Using interactive boot, the console user could disable auditing, firewalls, or o
   tag version: 'RHEL-06-000070'
   tag ruleid: 'SV-50389r1_rule'
   tag fixtext: '
-To disable the ability for users to perform interactive startups, edit the file "/etc/sysconfig/init". Add or correct the line: 
+To disable the ability for users to perform interactive startups, edit the file "/etc/sysconfig/init". Add or correct the line:
 
 PROMPT=no
 
 The "PROMPT" option allows the console user to perform an interactive system startup, in which it is possible to select the set of services which are started on boot.
 '
   tag checktext: '
-To check whether interactive boot is disabled, run the following command: 
+To check whether interactive boot is disabled, run the following command:
 
 $ grep PROMPT /etc/sysconfig/init
 
-If interactive boot is disabled, the output will show: 
+If interactive boot is disabled, the output will show:
 
 PROMPT=no
 
@@ -39,9 +39,10 @@ PROMPT=no
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38588
+  describe parse_config_file('/etc/sysconfig/init') do
+   its('PROMPT') { should eq 'no' }
+  end
+# END_DESCRIBE V-38588
+
 end

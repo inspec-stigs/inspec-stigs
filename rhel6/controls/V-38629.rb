@@ -20,7 +20,7 @@ Setting the idle delay controls when the screensaver will start, and can be comb
   tag version: 'RHEL-06-000257'
   tag ruleid: 'SV-50430r3_rule'
   tag fixtext: '
-Run the following command to set the idle time-out value for inactivity in the GNOME desktop to 15 minutes: 
+Run the following command to set the idle time-out value for inactivity in the GNOME desktop to 15 minutes:
 
 # gconftool-2 \
 --direct \
@@ -31,18 +31,21 @@ Run the following command to set the idle time-out value for inactivity in the G
   tag checktext: '
 If the GConf2 package is not installed, this is not applicable.
 
-To check the current idle time-out value, run the following command: 
+To check the current idle time-out value, run the following command:
 
 $ gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/idle_delay
 
-If properly configured, the output should be "15". 
+If properly configured, the output should be "15".
 
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38629
+  tag 'gconf','GConf2','screensaver','idle'
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome-screensaver/idle_delay') do
+    its('stdout') { should match "15" }
+  end
+# END_DESCRIBE V-38629
+
 end

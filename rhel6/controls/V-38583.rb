@@ -32,12 +32,13 @@ To check the permissions of /etc/grub.conf, run the command:
 $ sudo ls -lL /etc/grub.conf
 
 If properly configured, the output should indicate the following permissions: "-rw-------"
-If it does not, this is a finding. 
+If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38583
+  describe file('/etc/grub.conf') do
+    its('mode') { should cmp '0600' }
+  end
+# END_DESCRIBE V-38583
+
 end

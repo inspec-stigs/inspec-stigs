@@ -13,18 +13,18 @@ control 'V-38523' do
   desc '
 Accepting source-routed packets in the IPv4 protocol has few legitimate uses. It should be disabled unless it is absolutely required.
 '
-  tag 'stig','V-38523'
+  tag 'stig','V-38523','network','sysctl'
   tag severity: 'medium'
   tag checkid: 'C-46081r3_chk'
   tag fixid: 'F-43471r1_fix'
   tag version: 'RHEL-06-000083'
   tag ruleid: 'SV-50324r2_rule'
   tag fixtext: '
-To set the runtime status of the "net.ipv4.conf.all.accept_source_route" kernel parameter, run the following command: 
+To set the runtime status of the "net.ipv4.conf.all.accept_source_route" kernel parameter, run the following command:
 
 # sysctl -w net.ipv4.conf.all.accept_source_route=0
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 net.ipv4.conf.all.accept_source_route = 0
 '
@@ -37,12 +37,13 @@ The output of the command should indicate a value of "0". If this value is not t
 
 $ grep net.ipv4.conf.all.accept_source_route /etc/sysctl.conf
 
-If the correct value is not returned, this is a finding. 
+If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38523
+  describe kernel_parameter('net.ipv4.conf.all.accept_source_route') do
+    its('value') { should eq 0 }
+  end
+# END_DESCRIBE V-38523
+
 end

@@ -23,17 +23,19 @@ Legitimate device files should only exist in the /dev directory. NFS mounts shou
 Add the "nodev" option to the fourth column of "/etc/fstab" for the line which controls mounting of any NFS mounts.
 '
   tag checktext: '
-To verify the "nodev" option is configured for all NFS mounts, run the following command: 
+To verify the "nodev" option is configured for all NFS mounts, run the following command:
 
 $ mount | grep "nfs "
 
-All NFS mounts should show the "nodev" setting in parentheses, along with other mount options. 
+All NFS mounts should show the "nodev" setting in parentheses, along with other mount options.
 If the setting does not show, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38652
+  tag 'mount','fstab','nfs'
+  describe command("mount | grep 'nfs ' | grep -v 'nodev'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38652
+
 end

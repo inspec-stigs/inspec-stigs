@@ -20,22 +20,23 @@ The system\'s mandatory access policy (SELinux) should not be arbitrarily change
   tag version: 'RHEL-06-000183'
   tag ruleid: 'SV-50342r1_rule'
   tag fixtext: '
-Add the following to "/etc/audit/audit.rules": 
+Add the following to "/etc/audit/audit.rules":
 
 -w /etc/selinux/ -p wa -k MAC-policy
 '
   tag checktext: '
-To determine if the system is configured to audit changes to its SELinux configuration files, run the following command: 
+To determine if the system is configured to audit changes to its SELinux configuration files, run the following command:
 
 # auditctl -l | grep "dir=/etc/selinux"
 
-If the system is configured to watch for changes to its SELinux configuration, a line should be returned (including "perm=wa" indicating permissions that are watched). 
+If the system is configured to watch for changes to its SELinux configuration, a line should be returned (including "perm=wa" indicating permissions that are watched).
 If the system is not configured to audit attempts to change the MAC policy, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38541
+  describe auditd_rules do
+    its('lines') { should include("-w /etc/selinux/ -p wa -k MAC-policy") }
+  end
+# END_DESCRIBE V-38541
+
 end

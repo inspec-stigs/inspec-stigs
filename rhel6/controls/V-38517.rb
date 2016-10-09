@@ -20,21 +20,31 @@ Disabling TIPC protects the system against exploitation of any flaws in its impl
   tag version: 'RHEL-06-000127'
   tag ruleid: 'SV-50318r3_rule'
   tag fixtext: '
-The Transparent Inter-Process Communication (TIPC) protocol is designed to provide communications between nodes in a cluster. To configure the system to prevent the "tipc" kernel module from being loaded, add the following line to a file in the directory "/etc/modprobe.d": 
+The Transparent Inter-Process Communication (TIPC) protocol is designed to provide communications between nodes in a cluster. To configure the system to prevent the "tipc" kernel module from being loaded, add the following line to a file in the directory "/etc/modprobe.d":
 
 install tipc /bin/true
 '
   tag checktext: '
-If the system is configured to prevent the loading of the "tipc" kernel module, it will contain lines inside any file in "/etc/modprobe.d" or the deprecated"/etc/modprobe.conf". These lines instruct the module loading system to run another program (such as "/bin/true") upon a module "install" event. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf": 
+If the system is configured to prevent the loading of the "tipc" kernel module, it will contain lines inside any file in "/etc/modprobe.d" or the deprecated"/etc/modprobe.conf". These lines instruct the module loading system to run another program (such as "/bin/true") upon a module "install" event. Run the following command to search for such lines in all files in "/etc/modprobe.d" and the deprecated "/etc/modprobe.conf":
 
 $ grep -r tipc /etc/modprobe.conf /etc/modprobe.d
 
 If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38517
+  km = 'tipc'
+  describe kernel_module(km) do
+    it { should_not be_loaded }
+  end
+  if file('/etc/modprobe.conf').exist?
+    check_files = '/etc/modprobe.conf /etc/modprobe.d'
+  else
+    check_files = '/etc/modprobe.d'
+  end
+  describe command("grep -r 'install #{km} /bin/true' #{check_files}") do
+    its('stdout') { should_not eq '' }
+  end
+# END_DESCRIBE V-38517
+
 end

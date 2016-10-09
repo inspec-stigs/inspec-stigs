@@ -20,7 +20,7 @@ The ssl directive specifies whether to use ssl or not. If not specified it will 
   tag version: 'RHEL-06-000252'
   tag ruleid: 'SV-50426r1_rule'
   tag fixtext: '
-Configure LDAP to enforce TLS use. First, edit the file "/etc/pam_ldap.conf", and add or correct the following lines: 
+Configure LDAP to enforce TLS use. First, edit the file "/etc/pam_ldap.conf", and add or correct the following lines:
 
 ssl start_tls
 
@@ -29,7 +29,7 @@ Then review the LDAP server and ensure TLS has been configured.
   tag checktext: '
 If the system does not use LDAP for authentication or account information, this is not applicable.
 
-To ensure LDAP is configured to use TLS for all transactions, run the following command: 
+To ensure LDAP is configured to use TLS for all transactions, run the following command:
 
 $ grep start_tls /etc/pam_ldap.conf
 
@@ -37,9 +37,15 @@ $ grep start_tls /etc/pam_ldap.conf
 If no lines are returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38625
+  tag 'pam','ldap','pam_ldap.conf'
+  only_if { file('/etc/pam_ldap.conf').exist? }
+  options = {
+    assignment_re: /^(.*?)\s+(.*)$/
+  }
+  describe parse_config_file('/etc/pam_ldap.conf',options) do
+    its('ssl') { should eq 'start_tls' }
+  end
+# END_DESCRIBE V-38625
+
 end

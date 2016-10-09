@@ -20,12 +20,12 @@ The sendmail software was not developed with security in mind and its design pre
   tag version: 'RHEL-06-000288'
   tag ruleid: 'SV-50472r1_rule'
   tag fixtext: '
-Sendmail is not the default mail transfer agent and is not installed by default. The "sendmail" package can be removed with the following command: 
+Sendmail is not the default mail transfer agent and is not installed by default. The "sendmail" package can be removed with the following command:
 
 # yum erase sendmail
 '
   tag checktext: '
-Run the following command to determine if the "sendmail" package is installed: 
+Run the following command to determine if the "sendmail" package is installed:
 
 # rpm -q sendmail
 
@@ -33,9 +33,11 @@ Run the following command to determine if the "sendmail" package is installed:
 If the package is installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38671
+  tag 'package','sendmail'
+  describe package('sendmail') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38671
+
 end

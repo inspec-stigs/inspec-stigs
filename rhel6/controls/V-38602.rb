@@ -20,12 +20,12 @@ The rlogin service uses unencrypted network communications, which means that dat
   tag version: 'RHEL-06-000218'
   tag ruleid: 'SV-50403r2_rule'
   tag fixtext: '
-The "rlogin" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rlogin" service can be disabled with the following command: 
+The "rlogin" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rlogin" service can be disabled with the following command:
 
 # chkconfig rlogin off
 '
   tag checktext: '
- 
+
 To check that the "rlogin" service is disabled in system boot configuration, run the following command:
 
 # chkconfig "rlogin" --list
@@ -41,9 +41,11 @@ error reading information on service rlogin: No such file or directory
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38602
+  describe service('rlogin') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+  end
+# END_DESCRIBE V-38602
+
 end

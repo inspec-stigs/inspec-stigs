@@ -38,9 +38,12 @@ Some log files referenced in /etc/rsyslog.conf may be created by other programs 
 If the group-owner is not root, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38519
+  ["messages","secure","maillog","cron","spooler","boot.log"].each do |log|
+    describe file("/var/log/#{log}") do
+      its('group') { should eq 'root' }
+    end
+  end
+# END_DESCRIBE V-38519
+
 end

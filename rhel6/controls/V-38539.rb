@@ -20,11 +20,11 @@ A TCP SYN flood attack can cause a denial of service by filling a system\'s TCP 
   tag version: 'RHEL-06-000095'
   tag ruleid: 'SV-50340r2_rule'
   tag fixtext: '
-To set the runtime status of the "net.ipv4.tcp_syncookies" kernel parameter, run the following command: 
+To set the runtime status of the "net.ipv4.tcp_syncookies" kernel parameter, run the following command:
 
 # sysctl -w net.ipv4.tcp_syncookies=1
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 net.ipv4.tcp_syncookies = 1
 '
@@ -37,12 +37,13 @@ The output of the command should indicate a value of "1". If this value is not t
 
 $ grep net.ipv4.tcp_syncookies /etc/sysctl.conf
 
-If the correct value is not returned, this is a finding. 
+If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38539
+  describe kernel_parameter('net.ipv4.tcp_syncookies') do
+    its('value') { should eq 1 }
+  end
+# END_DESCRIBE V-38539
+
 end

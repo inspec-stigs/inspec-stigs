@@ -25,16 +25,21 @@ The "logrotate" service should be installed or reinstalled if it is not installe
 # yum reinstall logrotate
 '
   tag checktext: '
-Run the following commands to determine the current status of the "logrotate" service: 
+Run the following commands to determine the current status of the "logrotate" service:
 
 # grep logrotate /var/log/cron*
 
 If the logrotate service is not run on a daily basis by cron, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38624
+  tag 'logrotate','package'
+  describe package('logrotate') do
+    it { should be_installed }
+  end
+  describe command('grep logrotate /etc/cron.*/*') do
+    its('stdout') { should_not eq "" }
+  end
+# END_DESCRIBE V-38624
+
 end

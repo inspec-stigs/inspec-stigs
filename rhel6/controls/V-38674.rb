@@ -20,16 +20,16 @@ Unnecessary services should be disabled to decrease the attack surface of the sy
   tag version: 'RHEL-06-000290'
   tag ruleid: 'SV-50475r1_rule'
   tag fixtext: '
-Setting the system\'s runlevel to 3 will prevent automatic startup of the X server. To do so, ensure the following line in "/etc/inittab" features a "3" as shown: 
+Setting the system\'s runlevel to 3 will prevent automatic startup of the X server. To do so, ensure the following line in "/etc/inittab" features a "3" as shown:
 
 id:3:initdefault:
 '
   tag checktext: '
-To verify the default runlevel is 3, run the following command: 
+To verify the default runlevel is 3, run the following command:
 
 # grep initdefault /etc/inittab
 
-The output should show the following: 
+The output should show the following:
 
 id:3:initdefault:
 
@@ -37,9 +37,11 @@ id:3:initdefault:
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38674
+  tag 'inittab','runlevel','xwindows'
+  describe file('/etc/inittab') do
+    its('content') { should match /id:3:initdefault:/ }
+  end
+# END_DESCRIBE V-38674
+
 end

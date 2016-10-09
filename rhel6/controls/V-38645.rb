@@ -20,16 +20,16 @@ The umask value influences the permissions assigned to files when they are creat
   tag version: 'RHEL-06-000345'
   tag ruleid: 'SV-50446r1_rule'
   tag fixtext: '
-To ensure the default umask controlled by "/etc/login.defs" is set properly, add or correct the "umask" setting in "/etc/login.defs" to read as follows: 
+To ensure the default umask controlled by "/etc/login.defs" is set properly, add or correct the "umask" setting in "/etc/login.defs" to read as follows:
 
 UMASK 077
 '
   tag checktext: '
-Verify the "umask" setting is configured correctly in the "/etc/login.defs" file by running the following command: 
+Verify the "umask" setting is configured correctly in the "/etc/login.defs" file by running the following command:
 
 # grep -i "umask" /etc/login.defs
 
-All output must show the value of "umask" set to 077, as shown in the below: 
+All output must show the value of "umask" set to 077, as shown in the below:
 
 # grep -i "umask" /etc/login.defs
 UMASK 077
@@ -38,9 +38,12 @@ UMASK 077
 If the above command returns no output, or if the umask is configured incorrectly, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38645
+  tag 'login.defs','UMASK'
+  describe login_defs do
+    its('UMASK') { should eq '077' }
+  end
+
+# END_DESCRIBE V-38645
+
 end

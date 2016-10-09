@@ -13,7 +13,7 @@ control 'V-38471' do
   desc '
 The auditd service does not include the ability to send audit records to a centralized server for management directly.  It does, however, include an audit event multiplexor plugin (audispd) to pass audit records to the local syslog server.
 '
-  tag 'stig','V-38471'
+  tag 'stig','V-38471','audit'
   tag severity: 'low'
   tag checkid: 'C-46026r1_chk'
   tag fixid: 'F-43416r1_fix'
@@ -32,9 +32,10 @@ Verify the audispd plugin is active:
 If the "active" setting is missing or set to "no", this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38471
+  describe file('/etc/audisp/plugins.d/syslog.conf') do
+    its('content') { should match "^active = yes$" }
+  end
+# END_DESCRIBE V-38471
+
 end

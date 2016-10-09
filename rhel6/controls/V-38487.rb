@@ -13,31 +13,34 @@ control 'V-38487' do
   desc '
 Ensuring all packages\' cryptographic signatures are valid prior to installation ensures the provenance of the software and protects against malicious tampering.
 '
-  tag 'stig','V-38487'
+  tag 'stig','V-38487','yum'
   tag severity: 'low'
   tag checkid: 'C-46043r1_chk'
   tag fixid: 'F-43433r1_fix'
   tag version: 'RHEL-06-000015'
   tag ruleid: 'SV-50288r1_rule'
   tag fixtext: '
-To ensure signature checking is not disabled for any repos, remove any lines from files in "/etc/yum.repos.d" of the form: 
+To ensure signature checking is not disabled for any repos, remove any lines from files in "/etc/yum.repos.d" of the form:
 
 gpgcheck=0
 '
   tag checktext: '
-To determine whether "yum" has been configured to disable "gpgcheck" for any repos, inspect all files in "/etc/yum.repos.d" and ensure the following does not appear in any sections: 
+To determine whether "yum" has been configured to disable "gpgcheck" for any repos, inspect all files in "/etc/yum.repos.d" and ensure the following does not appear in any sections:
 
 gpgcheck=0
 
-A value of "0" indicates that "gpgcheck" has been disabled for that repo. 
+A value of "0" indicates that "gpgcheck" has been disabled for that repo.
 If GPG checking is disabled, this is a finding.
 
 If the "yum" system package management tool is not used to update the system, verify with the SA that installed packages are cryptographically signed.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38487
+  if os[:family] == 'redhat'
+    describe command("grep '^gpgcheck=0' /etc/yum.repos.d/*") do
+      its('stdout') { should eq '' }
+    end
+  end
+# END_DESCRIBE V-38487
+
 end

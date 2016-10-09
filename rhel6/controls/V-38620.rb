@@ -20,17 +20,17 @@ Enabling the "ntpd" service ensures that the "ntpd" service will be running and 
   tag version: 'RHEL-06-000247'
   tag ruleid: 'SV-50421r1_rule'
   tag fixtext: '
-The "ntpd" service can be enabled with the following command: 
+The "ntpd" service can be enabled with the following command:
 
 # chkconfig ntpd on
 # service ntpd start
 '
   tag checktext: '
-Run the following command to determine the current status of the "ntpd" service: 
+Run the following command to determine the current status of the "ntpd" service:
 
 # service ntpd status
 
-If the service is enabled, it should return the following: 
+If the service is enabled, it should return the following:
 
 ntpd is running...
 
@@ -38,9 +38,12 @@ ntpd is running...
 If the service is not running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38620
+  tag 'ntpd','service'
+  describe service('ntpd') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+# END_DESCRIBE V-38620
+
 end

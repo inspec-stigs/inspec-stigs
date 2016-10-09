@@ -20,16 +20,16 @@ The umask value influences the permissions assigned to files when they are creat
   tag version: 'RHEL-06-000343'
   tag ruleid: 'SV-50450r1_rule'
   tag fixtext: '
-To ensure the default umask for users of the C shell is set properly, add or correct the "umask" setting in "/etc/csh.cshrc" to read as follows: 
+To ensure the default umask for users of the C shell is set properly, add or correct the "umask" setting in "/etc/csh.cshrc" to read as follows:
 
 umask 077
 '
   tag checktext: '
-Verify the "umask" setting is configured correctly in the "/etc/csh.cshrc" file by running the following command: 
+Verify the "umask" setting is configured correctly in the "/etc/csh.cshrc" file by running the following command:
 
 # grep "umask" /etc/csh.cshrc
 
-All output must show the value of "umask" set to 077, as shown in the below: 
+All output must show the value of "umask" set to 077, as shown in the below:
 
 # grep "umask" /etc/csh.cshrc
 umask 077
@@ -38,9 +38,11 @@ umask 077
 If the above command returns no output, or if the umask is configured incorrectly, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38649
+  tag 'csh.cshrc','umask'
+  describe command("grep 'umask [0-9]' /etc/csh.cshrc | grep -v 077") do
+    its('stdout') { should be '' }
+  end
+# END_DESCRIBE V-38649
+
 end

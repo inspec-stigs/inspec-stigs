@@ -20,7 +20,7 @@ A core dump includes a memory image taken at the time the operating system termi
   tag version: 'RHEL-06-000308'
   tag ruleid: 'SV-50476r2_rule'
   tag fixtext: '
-To disable core dumps for all users, add the following line to "/etc/security/limits.conf": 
+To disable core dumps for all users, add the following line to "/etc/security/limits.conf":
 
 * hard core 0
 '
@@ -33,12 +33,14 @@ The output should be:
 
 * hard core 0
 
-If it is not, this is a finding. 
+If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38675
+  tag 'limits','coredimps'
+  describe command("grep '* hard core 0' /etc/security/limits.conf /etc/security/limits.d/*.conf") do
+    its('content') { should_not = "" }
+  end
+# END_DESCRIBE V-38675
+
 end

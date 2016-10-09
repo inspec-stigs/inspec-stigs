@@ -20,16 +20,16 @@ In "iptables" the default policy is applied only after all the applicable rules 
   tag version: 'RHEL-06-000320'
   tag ruleid: 'SV-50487r1_rule'
   tag fixtext: '
-To set the default policy to DROP (instead of ACCEPT) for the built-in FORWARD chain which processes packets that will be forwarded from one interface to another, add or correct the following line in "/etc/sysconfig/iptables": 
+To set the default policy to DROP (instead of ACCEPT) for the built-in FORWARD chain which processes packets that will be forwarded from one interface to another, add or correct the following line in "/etc/sysconfig/iptables":
 
 :FORWARD DROP [0:0]
 '
   tag checktext: '
-Run the following command to ensure the default "FORWARD" policy is "DROP": 
+Run the following command to ensure the default "FORWARD" policy is "DROP":
 
 grep ":FORWARD" /etc/sysconfig/iptables
 
-The output must be the following: 
+The output must be the following:
 
 # grep ":FORWARD" /etc/sysconfig/iptables
 :FORWARD DROP [0:0]
@@ -37,9 +37,12 @@ The output must be the following:
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38686
+  tag 'iptables','default','forward'
+  describe iptables do
+    it { should have_rule('-P FORWARD DROP') }
+  end
+
+# END_DESCRIBE V-38686
+
 end

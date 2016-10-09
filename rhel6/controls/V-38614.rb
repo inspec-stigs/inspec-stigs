@@ -20,24 +20,26 @@ Configuring this setting for the SSH daemon provides additional assurance that r
   tag version: 'RHEL-06-000239'
   tag ruleid: 'SV-50415r1_rule'
   tag fixtext: '
-To explicitly disallow remote login from accounts with empty passwords, add or correct the following line in "/etc/ssh/sshd_config": 
+To explicitly disallow remote login from accounts with empty passwords, add or correct the following line in "/etc/ssh/sshd_config":
 
 PermitEmptyPasswords no
 
 Any accounts with empty passwords should be disabled immediately, and PAM configuration should prevent users from being able to assign themselves empty passwords.
 '
   tag checktext: '
-To determine how the SSH daemon\'s "PermitEmptyPasswords" option is set, run the following command: 
+To determine how the SSH daemon\'s "PermitEmptyPasswords" option is set, run the following command:
 
 # grep -i PermitEmptyPasswords /etc/ssh/sshd_config
 
-If no line, a commented line, or a line indicating the value "no" is returned, then the required value is set. 
+If no line, a commented line, or a line indicating the value "no" is returned, then the required value is set.
 If the required value is not set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38614
+  tag 'sshd','PermitEmptyPasswords'
+  describe sshd_config do
+    its('PermitEmptyPasswords') { should eq 'no' }
+  end
+# END_DESCRIBE V-38614
+
 end

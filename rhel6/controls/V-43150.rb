@@ -37,12 +37,17 @@ $ gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
 --get /apps/gdm/simple-greeter/disable_user_list
 
-The output should be "true". If it is not, this is a finding. 
+The output should be "true". If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-43150
+  tag 'gconf','GConf2','disable_user_list'
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct \
+--config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
+--get /apps/gdm/simple-greeter/disable_user_list') do
+    its('stdout') { should eq 'true' }
+  end
+# END_DESCRIBE V-43150
+
 end

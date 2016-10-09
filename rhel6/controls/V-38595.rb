@@ -13,7 +13,7 @@ control 'V-38595' do
   desc '
 Smart card login provides two-factor authentication stronger than that provided by a username/password combination. Smart cards leverage a PKI (public key infrastructure) in order to provide and verify credentials.
 '
-  tag 'stig','V-38595'
+  tag 'stig','V-38595','untestable'
   tag severity: 'medium'
   tag checkid: 'C-46154r1_chk'
   tag fixid: 'F-43544r2_fix'
@@ -29,7 +29,7 @@ For guidance on enabling SSH to authenticate against a Common Access Card (CAC),
 https://access.redhat.com/solutions/82273
 '
   tag checktext: '
-Interview the SA to determine if all accounts not exempted by policy are using CAC authentication. For DoD systems, the following systems and accounts are exempt from using smart card (CAC) authentication: 
+Interview the SA to determine if all accounts not exempted by policy are using CAC authentication. For DoD systems, the following systems and accounts are exempt from using smart card (CAC) authentication:
 
 SIPRNET systems
 Standalone systems
@@ -43,9 +43,8 @@ Test systems, such as those with an Interim Approval to Test (IATT) and use a se
 If non-exempt accounts are not using CAC authentication, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38595
+  # can't really test this one
+# END_DESCRIBE V-38595
+
 end

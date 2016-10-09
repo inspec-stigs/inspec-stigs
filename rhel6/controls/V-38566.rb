@@ -20,7 +20,7 @@ Unsuccessful attempts to access files could be an indicator of malicious activit
   tag version: 'RHEL-06-000197'
   tag ruleid: 'SV-50367r2_rule'
   tag fixtext: '
-At a minimum, the audit system should collect unauthorized file accesses for all users and root. Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system: 
+At a minimum, the audit system should collect unauthorized file accesses for all users and root. Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system:
 
 -a always,exit -F arch=ARCH -S creat -S open -S openat -S truncate \
 -S ftruncate -F exit=-EACCES -F auid>=500 -F auid!=4294967295 -k access
@@ -32,7 +32,7 @@ At a minimum, the audit system should collect unauthorized file accesses for all
 -S ftruncate -F exit=-EPERM -F auid=0 -k access
 '
   tag checktext: '
-To verify that the audit system collects unauthorized file accesses, run the following commands: 
+To verify that the audit system collects unauthorized file accesses, run the following commands:
 
 # grep EACCES /etc/audit/audit.rules
 
@@ -44,9 +44,10 @@ To verify that the audit system collects unauthorized file accesses, run the fol
 If either command lacks output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38566
+  describe auditd_rules.syscall('ftruncate').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38566
+
 end

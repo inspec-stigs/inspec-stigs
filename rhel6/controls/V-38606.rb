@@ -20,12 +20,12 @@ Removing the "tftp-server" package decreases the risk of the accidental (or inte
   tag version: 'RHEL-06-000222'
   tag ruleid: 'SV-50407r2_rule'
   tag fixtext: '
-The "tftp-server" package can be removed with the following command: 
+The "tftp-server" package can be removed with the following command:
 
 # yum erase tftp-server
 '
   tag checktext: '
-Run the following command to determine if the "tftp-server" package is installed: 
+Run the following command to determine if the "tftp-server" package is installed:
 
 # rpm -q tftp-server
 
@@ -33,9 +33,11 @@ Run the following command to determine if the "tftp-server" package is installed
 If the package is installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38606
+  tag 'package','tftp-server','tftp'
+  describe package('tftp-server') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38606
+
 end

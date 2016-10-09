@@ -20,17 +20,17 @@ Arbitrary changes to the system time can be used to obfuscate nefarious activiti
   tag version: 'RHEL-06-000165'
   tag ruleid: 'SV-50436r3_rule'
   tag fixtext: '
-On a 32-bit system, add the following to "/etc/audit/audit.rules": 
+On a 32-bit system, add the following to "/etc/audit/audit.rules":
 
 # audit_time_rules
 -a always,exit -F arch=b32 -S adjtimex -k audit_time_rules
 
-On a 64-bit system, add the following to "/etc/audit/audit.rules": 
+On a 64-bit system, add the following to "/etc/audit/audit.rules":
 
 # audit_time_rules
 -a always,exit -F arch=b64 -S adjtimex -k audit_time_rules
 
-The -k option allows for the specification of a key in string form that can be used for better reporting capability through ausearch and aureport. Multiple system calls can be defined on the same line to save space if desired, but is not required. See an example of multiple combined syscalls: 
+The -k option allows for the specification of a key in string form that can be used for better reporting capability through ausearch and aureport. Multiple system calls can be defined on the same line to save space if desired, but is not required. See an example of multiple combined syscalls:
 
 -a always,exit -F arch=b64 -S adjtimex -S settimeofday -S clock_settime -k audit_time_rules
 '
@@ -39,14 +39,16 @@ To determine if the system is configured to audit calls to the "adjtimex" system
 
 $ sudo grep -w "adjtimex" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return a line. 
+If the system is configured to audit this activity, it will return a line.
 
 If the system is not configured to audit time changes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38635
+  tag 'auditd','audit.rules','adjtimex','syscall'
+  describe auditd_rules.syscall('adjtimex').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38635
+
 end

@@ -13,38 +13,38 @@ control 'V-38521' do
   desc '
 A log server (loghost) receives syslog messages from one or more systems. This data can be used as an additional log source in the event a system is compromised and its local logs are suspect. Forwarding log messages to a remote loghost also provides system administrators with a centralized place to view the status of multiple hosts within the enterprise.
 '
-  tag 'stig','V-38521'
+  tag 'stig','V-38521','untestable'
   tag severity: 'medium'
   tag checkid: 'C-46269r1_chk'
   tag fixid: 'F-43656r1_fix'
   tag version: 'RHEL-06-000137'
   tag ruleid: 'SV-50322r1_rule'
   tag fixtext: '
-To configure rsyslog to send logs to a remote log server, open "/etc/rsyslog.conf" and read and understand the last section of the file, which describes the multiple directives necessary to activate remote logging. Along with these other directives, the system can be configured to forward its logs to a particular log server by adding or correcting one of the following lines, substituting "[loghost.example.com]" appropriately. The choice of protocol depends on the environment of the system; although TCP and RELP provide more reliable message delivery, they may not be supported in all environments. 
-To use UDP for log message delivery: 
+To configure rsyslog to send logs to a remote log server, open "/etc/rsyslog.conf" and read and understand the last section of the file, which describes the multiple directives necessary to activate remote logging. Along with these other directives, the system can be configured to forward its logs to a particular log server by adding or correcting one of the following lines, substituting "[loghost.example.com]" appropriately. The choice of protocol depends on the environment of the system; although TCP and RELP provide more reliable message delivery, they may not be supported in all environments.
+To use UDP for log message delivery:
 
 *.* @[loghost.example.com]
 
 
-To use TCP for log message delivery: 
+To use TCP for log message delivery:
 
 *.* @@[loghost.example.com]
 
 
-To use RELP for log message delivery: 
+To use RELP for log message delivery:
 
 *.* :omrelp:[loghost.example.com]
 '
   tag checktext: '
-To ensure logs are sent to a remote host, examine the file "/etc/rsyslog.conf". If using UDP, a line similar to the following should be present: 
+To ensure logs are sent to a remote host, examine the file "/etc/rsyslog.conf". If using UDP, a line similar to the following should be present:
 
 *.* @[loghost.example.com]
 
-If using TCP, a line similar to the following should be present: 
+If using TCP, a line similar to the following should be present:
 
 *.* @@[loghost.example.com]
 
-If using RELP, a line similar to the following should be present: 
+If using RELP, a line similar to the following should be present:
 
 *.* :omrelp:[loghost.example.com]
 
@@ -52,9 +52,8 @@ If using RELP, a line similar to the following should be present:
 If none of these are present, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38521
+# there are too many ways to send logs off machine to effectively test this.
+# END_DESCRIBE V-38521
+
 end

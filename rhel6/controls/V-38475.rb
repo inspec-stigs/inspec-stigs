@@ -15,14 +15,14 @@ Requiring a minimum password length makes password cracking attacks more difficu
 
 While it does not negate the password length requirement, it is preferable to migrate from a password-based authentication scheme to a stronger one based on PKI (public key infrastructure).
 '
-  tag 'stig','V-38475'
+  tag 'stig','V-38475','password','login.defs'
   tag severity: 'medium'
   tag checkid: 'C-46029r1_chk'
   tag fixid: 'F-43419r1_fix'
   tag version: 'RHEL-06-000050'
   tag ruleid: 'SV-50275r1_rule'
   tag fixtext: '
-To specify password length requirements for new accounts, edit the file "/etc/login.defs" and add or correct the following lines: 
+To specify password length requirements for new accounts, edit the file "/etc/login.defs" and add or correct the following lines:
 
 PASS_MIN_LEN 14
 
@@ -31,17 +31,18 @@ PASS_MIN_LEN 14
 The DoD requirement is "14". If a program consults "/etc/login.defs" and also another PAM module (such as "pam_cracklib") during a password change operation, then the most restrictive must be satisfied.
 '
   tag checktext: '
-To check the minimum password length, run the command: 
+To check the minimum password length, run the command:
 
 $ grep PASS_MIN_LEN /etc/login.defs
 
-The DoD requirement is "14". 
+The DoD requirement is "14".
 If it is not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38475
+  describe login_defs do
+    its('PASS_MIN_LEN') { should eq '14' }
+  end
+# END_DESCRIBE V-38475
+
 end

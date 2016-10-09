@@ -34,12 +34,15 @@ To ensure the system is configured to log a message instead of rebooting the sys
 
 exec /usr/bin/logger -p security.info "Control-Alt-Delete pressed"
 
-If the system is not configured to block the shutdown command when Ctrl-Alt-Delete is pressed, this is a finding. 
+If the system is not configured to block the shutdown command when Ctrl-Alt-Delete is pressed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38668
+  only_if { file('/etc/init/control-alt-delete.conf').exist? }
+  describe file('/etc/init/control-alt-delete.conf') do
+    its('content') { should_not match "exec /sbin/shutdown" }
+    its('content') { should match "exec /usr/bin/logger" }
+  end
+# END_DESCRIBE V-38668
+
 end

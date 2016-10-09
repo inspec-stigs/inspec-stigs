@@ -20,7 +20,7 @@ Preventing direct root login to serial port interfaces helps ensure accountabili
   tag version: 'RHEL-06-000028'
   tag ruleid: 'SV-50295r1_rule'
   tag fixtext: '
-To restrict root logins on serial ports, ensure lines of this form do not appear in "/etc/securetty": 
+To restrict root logins on serial ports, ensure lines of this form do not appear in "/etc/securetty":
 
 ttyS0
 ttyS1
@@ -28,17 +28,18 @@ ttyS1
 Note:  Serial port entries are not limited to those listed above.  Any lines starting with "ttyS" followed by numerals should be removed
 '
   tag checktext: '
-To check for serial port entries which permit root login, run the following command: 
+To check for serial port entries which permit root login, run the following command:
 
 # grep \'^ttyS[0-9]\' /etc/securetty
 
-If any output is returned, then root login over serial ports is permitted. 
+If any output is returned, then root login over serial ports is permitted.
 If root login over serial ports is permitted, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38494
+  describe command("grep '^ttyS[0-9]' /etc/securetty") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38494
+
 end

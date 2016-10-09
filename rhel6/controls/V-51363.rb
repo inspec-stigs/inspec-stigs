@@ -11,7 +11,7 @@ control 'V-51363' do
   impact 0.5
   title 'The system must use a Linux Security Module configured to enforce limits on system services.'
   desc '
-Setting the SELinux state to enforcing ensures SELinux is able to confine potentially compromised processes to the security policy, which is designed to prevent them from causing damage to the system or further elevating their privileges. 
+Setting the SELinux state to enforcing ensures SELinux is able to confine potentially compromised processes to the security policy, which is designed to prevent them from causing damage to the system or further elevating their privileges.
 '
   tag 'stig','V-51363'
   tag severity: 'medium'
@@ -29,12 +29,14 @@ Check the file "/etc/selinux/config" and ensure the following line appears:
 
 SELINUX=enforcing
 
-If SELINUX is not set to enforcing, this is a finding. 
+If SELINUX is not set to enforcing, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-51363
+  tag 'selinux','enforcing'
+  describe parse_config_file('/etc/selinux/config') do
+    its('SELINUX') { should eq 'enforcing' }
+  end
+# END_DESCRIBE V-51363
+
 end

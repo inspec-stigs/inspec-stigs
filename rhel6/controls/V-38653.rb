@@ -20,22 +20,25 @@ Presence of the default SNMP password enables querying of different system aspec
   tag version: 'RHEL-06-000341'
   tag ruleid: 'SV-50454r1_rule'
   tag fixtext: '
-Edit "/etc/snmp/snmpd.conf", remove default community string "public". Upon doing that, restart the SNMP service: 
+Edit "/etc/snmp/snmpd.conf", remove default community string "public". Upon doing that, restart the SNMP service:
 
 # service snmpd restart
 '
   tag checktext: '
-To ensure the default password is not set, run the following command: 
+To ensure the default password is not set, run the following command:
 
 # grep -v "^#" /etc/snmp/snmpd.conf| grep public
 
-There should be no output. 
+There should be no output.
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38653
+  tag 'snmp','snmpd.conf'
+  only_if { file('/etc/snmp/snmpd.conf').exist? }
+  describe command('grep -v "^#" /etc/snmp/snmpd.conf| grep public') do
+    its('stdout') { should eq '' }
+  end
+# END_DESCRIBE V-38653
+
 end

@@ -20,26 +20,26 @@ Mishandling crash data could expose sensitive information about vulnerabilities 
   tag version: 'RHEL-06-000261'
   tag ruleid: 'SV-50441r2_rule'
   tag fixtext: '
-The Automatic Bug Reporting Tool ("abrtd") daemon collects and reports crash data when an application crash is detected. Using a variety of plugins, abrtd can email crash reports to system administrators, log crash reports to files, or forward crash reports to a centralized issue tracking system such as RHTSupport. The "abrtd" service can be disabled with the following commands: 
+The Automatic Bug Reporting Tool ("abrtd") daemon collects and reports crash data when an application crash is detected. Using a variety of plugins, abrtd can email crash reports to system administrators, log crash reports to files, or forward crash reports to a centralized issue tracking system such as RHTSupport. The "abrtd" service can be disabled with the following commands:
 
 # chkconfig abrtd off
 # service abrtd stop
 '
   tag checktext: '
-To check that the "abrtd" service is disabled in system boot configuration, run the following command: 
+To check that the "abrtd" service is disabled in system boot configuration, run the following command:
 
 # chkconfig "abrtd" --list
 
-Output should indicate the "abrtd" service has either not been installed, or has been disabled at all runlevels, as shown in the example below: 
+Output should indicate the "abrtd" service has either not been installed, or has been disabled at all runlevels, as shown in the example below:
 
 # chkconfig "abrtd" --list
 "abrtd" 0:off 1:off 2:off 3:off 4:off 5:off 6:off
 
-Run the following command to verify "abrtd" is disabled through current runtime configuration: 
+Run the following command to verify "abrtd" is disabled through current runtime configuration:
 
 # service abrtd status
 
-If the service is disabled the command will return the following output: 
+If the service is disabled the command will return the following output:
 
 abrtd is stopped
 
@@ -47,9 +47,12 @@ abrtd is stopped
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38640
+  tag 'service','abrtd'
+  describe service('abrtd') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+  end
+# END_DESCRIBE V-38640
+
 end

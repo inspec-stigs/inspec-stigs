@@ -23,16 +23,18 @@ Unencrypted passwords for remote FTP servers may be stored in ".netrc" files. Do
 The ".netrc" files contain logon information used to auto-logon into FTP servers and reside in the user\'s home directory. These files may contain unencrypted passwords to remote FTP servers making them susceptible to access by unauthorized users and should not be used. Any ".netrc" files should be removed.
 '
   tag checktext: '
-To check the system for the existence of any ".netrc" files, run the following command: 
+To check the system for the existence of any ".netrc" files, run the following command:
 
 $ sudo find /root /home -xdev -name .netrc
 
 If any .netrc files exist, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38619
+  tag '.netrc'
+  describe command('find /root /home -xdev -name .netrc') do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38619
+
 end

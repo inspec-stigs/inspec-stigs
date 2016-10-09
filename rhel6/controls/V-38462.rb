@@ -13,7 +13,7 @@ control 'V-38462' do
   desc '
 Ensuring all packages\' cryptographic signatures are valid prior to installation ensures the provenance of the software and protects against malicious tampering.
 '
-  tag 'stig','V-38462'
+  tag 'stig','V-38462', 'rpm'
   tag severity: 'high'
   tag checkid: 'C-46017r1_chk'
   tag fixid: 'F-43407r1_fix'
@@ -28,9 +28,19 @@ Verify RPM signature validation is not disabled:
 If any configuration is found, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38462
+  describe file('/etc/rpmrc') do
+    its('content') { should_not match /nosignature/ }
+  end
+  describe file('/usr/lib/rpm/rpmrc') do
+    its('content') { should_not match /nosignature/ }
+  end
+  describe file('/usr/lib/rpm/redhat/rpmrc') do
+    its('content') { should_not match /nosignature/ }
+  end
+  describe file('~root/.rpmrc') do
+    its('content') { should_not match /nosignature/ }
+  end
+# END_DESCRIBE V-38462
+
 end

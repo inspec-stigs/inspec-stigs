@@ -20,27 +20,28 @@ ExecShield uses the segmentation feature on all x86 systems to prevent execution
   tag version: 'RHEL-06-000079'
   tag ruleid: 'SV-50398r2_rule'
   tag fixtext: '
-To set the runtime status of the "kernel.exec-shield" kernel parameter, run the following command: 
+To set the runtime status of the "kernel.exec-shield" kernel parameter, run the following command:
 
 # sysctl -w kernel.exec-shield=1
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 kernel.exec-shield = 1
 '
   tag checktext: '
-The status of the "kernel.exec-shield" kernel parameter can be queried by running the following command: 
+The status of the "kernel.exec-shield" kernel parameter can be queried by running the following command:
 
 $ sysctl kernel.exec-shield
 $ grep kernel.exec-shield /etc/sysctl.conf
 
-The output of the command should indicate a value of "1". If this value is not the default value, investigate how it could have been adjusted at runtime, and verify it is not set improperly in "/etc/sysctl.conf". 
+The output of the command should indicate a value of "1". If this value is not the default value, investigate how it could have been adjusted at runtime, and verify it is not set improperly in "/etc/sysctl.conf".
 If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38597
+  describe kernel_parameter('kernel.exec-shield') do
+    its('value') { should eq 1 }
+  end
+# END_DESCRIBE V-38597
+
 end

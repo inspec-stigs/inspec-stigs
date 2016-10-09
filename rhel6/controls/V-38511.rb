@@ -13,18 +13,18 @@ control 'V-38511' do
   desc '
 IP forwarding permits the kernel to forward packets from one network interface to another. The ability to forward packets between two networks is only appropriate for systems acting as routers.
 '
-  tag 'stig','V-38511'
+  tag 'stig','V-38511','ip_forward'
   tag severity: 'medium'
   tag checkid: 'C-46068r3_chk'
   tag fixid: 'F-43458r2_fix'
   tag version: 'RHEL-06-000082'
   tag ruleid: 'SV-50312r2_rule'
   tag fixtext: '
-To set the runtime status of the "net.ipv4.ip_forward" kernel parameter, run the following command: 
+To set the runtime status of the "net.ipv4.ip_forward" kernel parameter, run the following command:
 
 # sysctl -w net.ipv4.ip_forward=0
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 net.ipv4.ip_forward = 0
 '
@@ -37,12 +37,13 @@ The output of the command should indicate a value of "0". If this value is not t
 
 $ grep net.ipv4.ip_forward /etc/sysctl.conf
 
-The ability to forward packets is only appropriate for routers. If the correct value is not returned, this is a finding. 
+The ability to forward packets is only appropriate for routers. If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38511
+  describe kernel_parameter('net.ipv4.ip_forward') do
+    its('value') { should eq 0 }
+  end
+# END_DESCRIBE V-38511
+
 end

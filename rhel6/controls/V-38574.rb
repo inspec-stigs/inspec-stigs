@@ -20,7 +20,7 @@ Using a stronger hashing algorithm makes password cracking attacks more difficul
   tag version: 'RHEL-06-000062'
   tag ruleid: 'SV-50375r2_rule'
   tag fixtext: '
-In "/etc/pam.d/system-auth" and "/etc/pam.d/system-auth-ac", among potentially other files, the "password" section of the files control which PAM modules execute during a password change. Set the "pam_unix.so" module in the "password" section to include the argument "sha512", as shown below: 
+In "/etc/pam.d/system-auth" and "/etc/pam.d/system-auth-ac", among potentially other files, the "password" section of the files control which PAM modules execute during a password change. Set the "pam_unix.so" module in the "password" section to include the argument "sha512", as shown below:
 
 password sufficient pam_unix.so sha512 [other arguments...]
 
@@ -36,9 +36,10 @@ $ grep password /etc/pam.d/* | grep pam_unix.so | grep sha512
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38574
+  describe command('grep password /etc/pam.d/* | grep pam_unix.so | grep sha512') do
+    its('stdout') { should_not eq '' }
+  end
+# END_DESCRIBE V-38574
+
 end

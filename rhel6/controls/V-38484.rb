@@ -36,9 +36,10 @@ Verify the value associated with the "PrintLastLog" keyword in /etc/ssh/sshd_con
 If the "PrintLastLog" keyword is not present, this is not a finding.  If the value is not set to "yes", this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38484
+  describe sshd_config do
+    its('PrintLastLog') { should eq 'yes' }
+  end
+# END_DESCRIBE V-38484
+
 end

@@ -20,14 +20,14 @@ Providing the ability for remote users or systems to initiate a secure VPN conne
   tag version: 'RHEL-06-000321'
   tag ruleid: 'SV-50488r2_rule'
   tag fixtext: '
-The Openswan package provides an implementation of IPsec and IKE, which permits the creation of secure tunnels over untrusted networks. The "openswan" package can be installed with the following command: 
+The Openswan package provides an implementation of IPsec and IKE, which permits the creation of secure tunnels over untrusted networks. The "openswan" package can be installed with the following command:
 
 # yum install openswan
 '
   tag checktext: '
 If the system does not communicate over untrusted networks, this is not applicable.
 
-Run the following command to determine if the "openswan" package is installed: 
+Run the following command to determine if the "openswan" package is installed:
 
 # rpm -q openswan
 
@@ -35,9 +35,9 @@ Run the following command to determine if the "openswan" package is installed:
 If the package is not installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38687
+  tag 'untestable'
+  # no good way to test if it should comm over untrusted networks
+# END_DESCRIBE V-38687
+
 end

@@ -20,7 +20,7 @@ Limiting simultaneous user logins can insulate the system from denial of service
   tag version: 'RHEL-06-000319'
   tag ruleid: 'SV-50485r2_rule'
   tag fixtext: '
-Limiting the number of allowed users and sessions per user can limit risks related to denial of service attacks. This addresses concurrent sessions for a single account and does not address concurrent sessions by a single user via multiple accounts. To set the number of concurrent sessions per user add the following line in "/etc/security/limits.conf": 
+Limiting the number of allowed users and sessions per user can limit risks related to denial of service attacks. This addresses concurrent sessions for a single account and does not address concurrent sessions by a single user via multiple accounts. To set the number of concurrent sessions per user add the following line in "/etc/security/limits.conf":
 
 * hard maxlogins 10
 
@@ -35,12 +35,14 @@ You should receive output similar to the following:
 
 * hard maxlogins 10
 
-If it is not similar, this is a finding. 
+If it is not similar, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38684
+  tag 'limits','maxlogins'
+  describe command("grep '* hard maxlogins 10' /etc/security/limits.conf /etc/security/limits.d/*.conf") do
+    its('stdout') { should_not eq '' }
+  end
+# END_DESCRIBE V-38684
+
 end

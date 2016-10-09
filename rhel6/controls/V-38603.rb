@@ -20,12 +20,12 @@ Removing the "ypserv" package decreases the risk of the accidental (or intention
   tag version: 'RHEL-06-000220'
   tag ruleid: 'SV-50404r1_rule'
   tag fixtext: '
-The "ypserv" package can be uninstalled with the following command: 
+The "ypserv" package can be uninstalled with the following command:
 
 # yum erase ypserv
 '
   tag checktext: '
-Run the following command to determine if the "ypserv" package is installed: 
+Run the following command to determine if the "ypserv" package is installed:
 
 # rpm -q ypserv
 
@@ -33,9 +33,10 @@ Run the following command to determine if the "ypserv" package is installed:
 If the package is installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38603
+  describe package('ypserv') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38603
+
 end

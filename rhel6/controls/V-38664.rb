@@ -20,12 +20,12 @@ Ownership of audit binaries and configuration files that is incorrect could allo
   tag version: 'RHEL-06-000279'
   tag ruleid: 'SV-50465r1_rule'
   tag fixtext: '
-The RPM package management system can restore file ownership of the audit package files and directories. The following command will update audit files with ownership different from what is expected by the RPM database: 
+The RPM package management system can restore file ownership of the audit package files and directories. The following command will update audit files with ownership different from what is expected by the RPM database:
 
 # rpm --setugids audit
 '
   tag checktext: '
-The following command will list which audit files on the system have ownership different from what is expected by the RPM database: 
+The following command will list which audit files on the system have ownership different from what is expected by the RPM database:
 
 # rpm -V audit | grep \'^.....U\'
 
@@ -33,9 +33,11 @@ The following command will list which audit files on the system have ownership d
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38664
+  tag 'rpm','owner'
+  describe command("rpm -V audit | grep '^.....U'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38664
+
 end

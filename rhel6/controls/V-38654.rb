@@ -23,17 +23,19 @@ NFS mounts should not present suid binaries to users. Only vendor-supplied suid 
 Add the "nosuid" option to the fourth column of "/etc/fstab" for the line which controls mounting of any NFS mounts.
 '
   tag checktext: '
-To verify the "nosuid" option is configured for all NFS mounts, run the following command: 
+To verify the "nosuid" option is configured for all NFS mounts, run the following command:
 
 $ mount | grep nfs
 
-All NFS mounts should show the "nosuid" setting in parentheses, along with other mount options. 
+All NFS mounts should show the "nosuid" setting in parentheses, along with other mount options.
 If the setting does not show, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38654
+  tag 'mount','fstab','nfs','nosuid'
+  describe command("mount | grep 'nfs ' | grep -v 'nosuid'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38654
+
 end

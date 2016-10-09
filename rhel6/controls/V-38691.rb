@@ -20,7 +20,7 @@ Disabling the "bluetooth" service prevents the system from attempting connection
   tag version: 'RHEL-06-000331'
   tag ruleid: 'SV-50492r2_rule'
   tag fixtext: '
-The "bluetooth" service can be disabled with the following command: 
+The "bluetooth" service can be disabled with the following command:
 
 # chkconfig bluetooth off
 
@@ -29,11 +29,11 @@ The "bluetooth" service can be disabled with the following command:
 # service bluetooth stop
 '
   tag checktext: '
-To check that the "bluetooth" service is disabled in system boot configuration, run the following command: 
+To check that the "bluetooth" service is disabled in system boot configuration, run the following command:
 
 # chkconfig "bluetooth" --list
 
-Output should indicate the "bluetooth" service has either not been installed or has been disabled at all runlevels, as shown in the example below: 
+Output should indicate the "bluetooth" service has either not been installed or has been disabled at all runlevels, as shown in the example below:
 
 # chkconfig "bluetooth" --list
 "bluetooth" 0:off 1:off 2:off 3:off 4:off 5:off 6:off
@@ -42,9 +42,12 @@ Output should indicate the "bluetooth" service has either not been installed or 
 If the service is configured to run, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38691
+  tag 'service','bluetooth'
+  describe service('bluetooth') do
+    it { should_not be_enabled }
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38691
+
 end

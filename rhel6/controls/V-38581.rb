@@ -20,22 +20,23 @@ The "root" group is a highly-privileged group. Furthermore, the group-owner of t
   tag version: 'RHEL-06-000066'
   tag ruleid: 'SV-50382r1_rule'
   tag fixtext: '
-The file "/etc/grub.conf" should be group-owned by the "root" group to prevent destruction or modification of the file. To properly set the group owner of "/etc/grub.conf", run the command: 
+The file "/etc/grub.conf" should be group-owned by the "root" group to prevent destruction or modification of the file. To properly set the group owner of "/etc/grub.conf", run the command:
 
 # chgrp root /etc/grub.conf
 '
   tag checktext: '
-To check the group ownership of "/etc/grub.conf", run the command: 
+To check the group ownership of "/etc/grub.conf", run the command:
 
 $ ls -lL /etc/grub.conf
 
-If properly configured, the output should indicate the following group-owner. "root" 
+If properly configured, the output should indicate the following group-owner. "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38581
+  describe file('/etc/grub.conf') do
+    its('group') { should eq 'root' }
+  end
+# END_DESCRIBE V-38581
+
 end

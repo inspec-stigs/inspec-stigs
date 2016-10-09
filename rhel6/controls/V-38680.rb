@@ -20,12 +20,12 @@ Email sent to the root account is typically aliased to the administrators of the
   tag version: 'RHEL-06-000313'
   tag ruleid: 'SV-50481r1_rule'
   tag fixtext: '
-The "auditd" service can be configured to send email to a designated account in certain situations. Add or correct the following line in "/etc/audit/auditd.conf" to ensure that administrators are notified via email for those situations: 
+The "auditd" service can be configured to send email to a designated account in certain situations. Add or correct the following line in "/etc/audit/auditd.conf" to ensure that administrators are notified via email for those situations:
 
 action_mail_acct = root
 '
   tag checktext: '
-Inspect "/etc/audit/auditd.conf" and locate the following line to determine if the system is configured to send email to an account when it needs to notify an administrator: 
+Inspect "/etc/audit/auditd.conf" and locate the following line to determine if the system is configured to send email to an account when it needs to notify an administrator:
 
 action_mail_acct = root
 
@@ -33,9 +33,11 @@ action_mail_acct = root
 If auditd is not configured to send emails per identified actions, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38680
+  tag 'auditd','auditd.conf','action_mail_acct'
+  describe parse_config_file('/etc/audit/auditd.conf') do
+    its('action_mail_acct') { should eq 'root' }
+  end
+# END_DESCRIBE V-38680
+
 end

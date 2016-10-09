@@ -20,11 +20,11 @@ Automatically rotating logs (by setting this to "rotate") minimizes the chances 
   tag version: 'RHEL-06-000161'
   tag ruleid: 'SV-50435r2_rule'
   tag fixtext: '
-The default action to take when the logs reach their maximum size is to rotate the log files, discarding the oldest one. To configure the action taken by "auditd", add or correct the line in "/etc/audit/auditd.conf": 
+The default action to take when the logs reach their maximum size is to rotate the log files, discarding the oldest one. To configure the action taken by "auditd", add or correct the line in "/etc/audit/auditd.conf":
 
 max_log_file_action = [ACTION]
 
-Possible values for [ACTION] are described in the "auditd.conf" man page. These include: 
+Possible values for [ACTION] are described in the "auditd.conf" man page. These include:
 
 "ignore"
 "syslog"
@@ -46,9 +46,11 @@ If the "keep_logs" option is configured for the "max_log_file_action" line in "/
 If the system has not been properly set up to rotate audit logs, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38634
+  tag 'auditd','auditd.conf','max_log_file_action'
+  describe parse_config_file("/etc/audit/auditd.conf") do
+    its("max_log_file_action") { should cmp 'rotate' }
+  end
+# END_DESCRIBE V-38634
+
 end

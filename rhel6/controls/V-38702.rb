@@ -20,18 +20,18 @@ To trace malicious activity facilitated by the FTP service, it must be configure
   tag version: 'RHEL-06-000339'
   tag ruleid: 'SV-50503r1_rule'
   tag fixtext: '
-Add or correct the following configuration options within the "vsftpd" configuration file, located at "/etc/vsftpd/vsftpd.conf". 
+Add or correct the following configuration options within the "vsftpd" configuration file, located at "/etc/vsftpd/vsftpd.conf".
 
 xferlog_enable=YES
 xferlog_std_format=NO
 log_ftp_protocol=YES
 '
   tag checktext: '
-Find if logging is applied to the ftp daemon. 
+Find if logging is applied to the ftp daemon.
 
-Procedures: 
+Procedures:
 
-If vsftpd is started by xinetd the following command will indicate the xinetd.d startup file. 
+If vsftpd is started by xinetd the following command will indicate the xinetd.d startup file.
 
 # grep vsftpd /etc/xinetd.d/*
 
@@ -39,7 +39,7 @@ If vsftpd is started by xinetd the following command will indicate the xinetd.d 
 
 # grep server_args [vsftpd xinetd.d startup file]
 
-This will indicate the vsftpd config file used when starting through xinetd. If the [server_args]line is missing or does not include the vsftpd configuration file, then the default config file (/etc/vsftpd/vsftpd.conf) is used. 
+This will indicate the vsftpd config file used when starting through xinetd. If the [server_args]line is missing or does not include the vsftpd configuration file, then the default config file (/etc/vsftpd/vsftpd.conf) is used.
 
 # grep xferlog_enable [vsftpd config file]
 
@@ -47,9 +47,15 @@ This will indicate the vsftpd config file used when starting through xinetd. If 
 If xferlog_enable is missing, or is not set to yes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38702
+  # V-38584 specifies not to install xinetd so will not check that
+  tag 'ftp', 'vsftpd','xferlog_enable','xferlog_std_format','log_ftp_protocol'
+  only_if { file('/etc/vsftpd/vsftpd.conf').exist? }
+  describe parse_config_file('/etc/vsftpd/vsftpd.conf') do
+    its('xferlog_enable') { should cmp 'YES'}
+    its('xferlog_std_format') { should cmp 'NO'}
+    its('log_ftp_protocol') { should cmp 'YES'}
+  end
+# END_DESCRIBE V-38702
+
 end

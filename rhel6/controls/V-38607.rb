@@ -20,16 +20,16 @@ SSH protocol version 1 suffers from design flaws that result in security vulnera
   tag version: 'RHEL-06-000227'
   tag ruleid: 'SV-50408r1_rule'
   tag fixtext: '
-Only SSH protocol version 2 connections should be permitted. The default setting in "/etc/ssh/sshd_config" is correct, and can be verified by ensuring that the following line appears: 
+Only SSH protocol version 2 connections should be permitted. The default setting in "/etc/ssh/sshd_config" is correct, and can be verified by ensuring that the following line appears:
 
 Protocol 2
 '
   tag checktext: '
-To check which SSH protocol version is allowed, run the following command: 
+To check which SSH protocol version is allowed, run the following command:
 
 # grep Protocol /etc/ssh/sshd_config
 
-If configured properly, output should be 
+If configured properly, output should be
 
 Protocol 2
 
@@ -37,9 +37,12 @@ Protocol 2
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38607
+  tag 'sshd','SSHv2'
+  describe sshd_config do
+    its('Protocol') { should eq '2' }
+  end
+
+# END_DESCRIBE V-38607
+
 end

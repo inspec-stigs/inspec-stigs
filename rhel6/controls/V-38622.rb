@@ -20,24 +20,26 @@ This ensures "postfix" accepts mail messages (such as cron job reports) from the
   tag version: 'RHEL-06-000249'
   tag ruleid: 'SV-50423r2_rule'
   tag fixtext: '
-Edit the file "/etc/postfix/main.cf" to ensure that only the following "inet_interfaces" line appears: 
+Edit the file "/etc/postfix/main.cf" to ensure that only the following "inet_interfaces" line appears:
 
 inet_interfaces = localhost
 '
   tag checktext: '
-If the system is an authorized mail relay host, this is not applicable. 
+If the system is an authorized mail relay host, this is not applicable.
 
-Run the following command to ensure postfix accepts mail messages from only the local system: 
+Run the following command to ensure postfix accepts mail messages from only the local system:
 
 $ grep inet_interfaces /etc/postfix/main.cf
 
-If properly configured, the output should show only "localhost". 
+If properly configured, the output should show only "localhost".
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38622
+  tag 'postfix','email','inet_interfaces'
+  describe parse_config_file('/etc/postfix/main.cf') do
+    its('inet_interfaces') { should eq 'localhost' }
+  end
+# END_DESCRIBE V-38622
+
 end

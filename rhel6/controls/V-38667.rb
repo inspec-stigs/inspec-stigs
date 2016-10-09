@@ -22,16 +22,16 @@ Adding host-based intrusion detection tools can provide the capability to automa
   tag fixtext: '
 The base Red Hat platform already includes a sophisticated auditing system that can detect intruder activity, as well as SELinux, which provides host-based intrusion prevention capabilities by confining privileged programs and user sessions which may become compromised.
 
-In DoD environments, supplemental intrusion detection tools, such as, the McAfee Host-based Security System, are available to integrate with existing infrastructure. When these supplemental tools interfere with the proper functioning of SELinux, SELinux takes precedence. 
+In DoD environments, supplemental intrusion detection tools, such as, the McAfee Host-based Security System, are available to integrate with existing infrastructure. When these supplemental tools interfere with the proper functioning of SELinux, SELinux takes precedence.
 '
   tag checktext: '
-Inspect the system to determine if intrusion detection software has been installed. Verify the intrusion detection software is active. 
+Inspect the system to determine if intrusion detection software has been installed. Verify the intrusion detection software is active.
 If no host-based intrusion detection tools are installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38667
+  tag 'untestable'
+  # untestable... can't know about intrusion detection software
+# END_DESCRIBE V-38667
+
 end

@@ -20,22 +20,23 @@ The "/etc/group" file contains information regarding groups that are configured 
   tag version: 'RHEL-06-000042'
   tag ruleid: 'SV-50258r1_rule'
   tag fixtext: '
-To properly set the owner of "/etc/group", run the command: 
+To properly set the owner of "/etc/group", run the command:
 
 # chown root /etc/group
 '
   tag checktext: '
-To check the ownership of "/etc/group", run the command: 
+To check the ownership of "/etc/group", run the command:
 
 $ ls -l /etc/group
 
-If properly configured, the output should indicate the following owner: "root" 
+If properly configured, the output should indicate the following owner: "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38458
+  describe file('/etc/group') do
+    its('group') { should eq 'root' }
+  end
+# END_DESCRIBE V-38458
+
 end

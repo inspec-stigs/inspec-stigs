@@ -13,7 +13,7 @@ control 'V-38463' do
   desc '
 Placing "/var/log" in its own partition enables better separation between log files and other files in "/var/".
 '
-  tag 'stig','V-38463'
+  tag 'stig','V-38463','mount','var_log'
   tag severity: 'low'
   tag checkid: 'C-46018r1_chk'
   tag fixid: 'F-43408r1_fix'
@@ -23,17 +23,18 @@ Placing "/var/log" in its own partition enables better separation between log fi
 System logs are stored in the "/var/log" directory. Ensure that it has its own partition or logical volume at installation time, or migrate it using LVM.
 '
   tag checktext: '
-Run the following command to determine if "/var/log" is on its own partition or logical volume: 
+Run the following command to determine if "/var/log" is on its own partition or logical volume:
 
 $ mount | grep "on /var/log "
 
-If "/var/log" has its own partition or volume group, a line will be returned. 
+If "/var/log" has its own partition or volume group, a line will be returned.
 If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38463
+  describe mount('/var/log') do
+    it { should be_mounted }
+  end
+# END_DESCRIBE V-38463
+
 end

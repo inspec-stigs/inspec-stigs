@@ -13,14 +13,14 @@ control 'V-38444' do
   desc '
 In "ip6tables" the default policy is applied only after all the applicable rules in the table are examined for a match. Setting the default policy to "DROP" implements proper design for a firewall, i.e., any packets which are not explicitly permitted should not be accepted.
 '
-  tag 'stig','V-38444'
+  tag 'stig','V-38444', 'ipv6'
   tag severity: 'medium'
   tag checkid: 'C-45999r2_chk'
   tag fixid: 'F-43389r3_fix'
   tag version: 'RHEL-06-000523'
   tag ruleid: 'SV-50244r2_rule'
   tag fixtext: '
-To set the default policy to DROP (instead of ACCEPT) for the built-in INPUT chain which processes incoming packets, add or correct the following line in "/etc/sysconfig/ip6tables": 
+To set the default policy to DROP (instead of ACCEPT) for the built-in INPUT chain which processes incoming packets, add or correct the following line in "/etc/sysconfig/ip6tables":
 
 :INPUT DROP [0:0]
 
@@ -35,12 +35,15 @@ Inspect the file "/etc/sysconfig/ip6tables" to determine the default policy for 
 
 # grep ":INPUT" /etc/sysconfig/ip6tables
 
-If the default policy for the INPUT chain is not set to DROP, this is a finding. 
+If the default policy for the INPUT chain is not set to DROP, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38444
+  only_if { kernel_module('ipv6').loaded? }
+
+  describe ip6tables do
+    it { should have_rule('-P INPUT DROP') }
+  end
+# END_DESCRIBE V-38444
+
 end

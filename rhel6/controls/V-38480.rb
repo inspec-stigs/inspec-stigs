@@ -20,24 +20,25 @@ Setting the password warning age enables users to make the change at a practical
   tag version: 'RHEL-06-000054'
   tag ruleid: 'SV-50280r1_rule'
   tag fixtext: '
-To specify how many days prior to password expiration that a warning will be issued to users, edit the file "/etc/login.defs" and add or correct the following line, replacing [DAYS] appropriately: 
+To specify how many days prior to password expiration that a warning will be issued to users, edit the file "/etc/login.defs" and add or correct the following line, replacing [DAYS] appropriately:
 
 PASS_WARN_AGE [DAYS]
 
 The DoD requirement is 7.
 '
   tag checktext: '
-To check the password warning age, run the command: 
+To check the password warning age, run the command:
 
 $ grep PASS_WARN_AGE /etc/login.defs
 
-The DoD requirement is 7. 
+The DoD requirement is 7.
 If it is not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38480
+describe login_defs do
+  its('PASS_WARN_AGE') { should eq '7' }
+end
+# END_DESCRIBE V-38480
+
 end

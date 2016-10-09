@@ -20,22 +20,24 @@ Permitting direct root login reduces auditable information about who ran privile
   tag version: 'RHEL-06-000237'
   tag ruleid: 'SV-50414r1_rule'
   tag fixtext: '
-The root user should never be allowed to log in to a system directly over a network. To disable root login via SSH, add or correct the following line in "/etc/ssh/sshd_config": 
+The root user should never be allowed to log in to a system directly over a network. To disable root login via SSH, add or correct the following line in "/etc/ssh/sshd_config":
 
 PermitRootLogin no
 '
   tag checktext: '
-To determine how the SSH daemon\'s "PermitRootLogin" option is set, run the following command: 
+To determine how the SSH daemon\'s "PermitRootLogin" option is set, run the following command:
 
 # grep -i PermitRootLogin /etc/ssh/sshd_config
 
-If a line indicating "no" is returned, then the required value is set. 
+If a line indicating "no" is returned, then the required value is set.
 If the required value is not set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38613
+  tag 'sshd','PermitRootLogin'
+  describe sshd_config do
+    its('PermitRootLogin') { should eq 'no' }
+  end
+# END_DESCRIBE V-38613
+
 end

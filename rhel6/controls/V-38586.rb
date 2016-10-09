@@ -20,18 +20,18 @@ This prevents attackers with physical access from trivially bypassing security o
   tag version: 'RHEL-06-000069'
   tag ruleid: 'SV-50387r1_rule'
   tag fixtext: '
-Single-user mode is intended as a system recovery method, providing a single user root access to the system by providing a boot option at startup. By default, no authentication is performed if single-user mode is selected. 
+Single-user mode is intended as a system recovery method, providing a single user root access to the system by providing a boot option at startup. By default, no authentication is performed if single-user mode is selected.
 
-To require entry of the root password even if the system is started in single-user mode, add or correct the following line in the file "/etc/sysconfig/init": 
+To require entry of the root password even if the system is started in single-user mode, add or correct the following line in the file "/etc/sysconfig/init":
 
 SINGLE=/sbin/sulogin
 '
   tag checktext: '
-To check if authentication is required for single-user mode, run the following command: 
+To check if authentication is required for single-user mode, run the following command:
 
 $ grep SINGLE /etc/sysconfig/init
 
-The output should be the following: 
+The output should be the following:
 
 SINGLE=/sbin/sulogin
 
@@ -39,9 +39,10 @@ SINGLE=/sbin/sulogin
 If the output is different, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38586
+  describe parse_config_file('/etc/sysconfig/init') do
+   its('SINGLE') { should eq '/sbin/sulogin' }
+  end
+# END_DESCRIBE V-38586
+
 end

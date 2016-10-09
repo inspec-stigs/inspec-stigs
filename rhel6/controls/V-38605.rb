@@ -20,17 +20,17 @@ Due to its usage for maintenance and security-supporting tasks, enabling the cro
   tag version: 'RHEL-06-000224'
   tag ruleid: 'SV-50406r2_rule'
   tag fixtext: '
-The "crond" service is used to execute commands at preconfigured times. It is required by almost all systems to perform necessary maintenance tasks, such as notifying root of system activity. The "crond" service can be enabled with the following commands: 
+The "crond" service is used to execute commands at preconfigured times. It is required by almost all systems to perform necessary maintenance tasks, such as notifying root of system activity. The "crond" service can be enabled with the following commands:
 
 # chkconfig crond on
 # service crond start
 '
   tag checktext: '
-Run the following command to determine the current status of the "crond" service: 
+Run the following command to determine the current status of the "crond" service:
 
 # service crond status
 
-If the service is enabled, it should return the following: 
+If the service is enabled, it should return the following:
 
 crond is running...
 
@@ -38,9 +38,12 @@ crond is running...
 If the service is not running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38605
+  tag 'cron','service'
+  describe service('crond') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+# END_DESCRIBE V-38605
+
 end

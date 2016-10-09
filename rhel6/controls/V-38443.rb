@@ -20,22 +20,23 @@ The "/etc/gshadow" file contains group password hashes. Protection of this file 
   tag version: 'RHEL-06-000036'
   tag ruleid: 'SV-50243r1_rule'
   tag fixtext: '
-To properly set the owner of "/etc/gshadow", run the command: 
+To properly set the owner of "/etc/gshadow", run the command:
 
 # chown root /etc/gshadow
 '
   tag checktext: '
-To check the ownership of "/etc/gshadow", run the command: 
+To check the ownership of "/etc/gshadow", run the command:
 
 $ ls -l /etc/gshadow
 
-If properly configured, the output should indicate the following owner: "root" 
+If properly configured, the output should indicate the following owner: "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38443
+  describe file('/etc/gshadow') do
+    it { should be_owned_by 'root' }
+  end
+# END_DESCRIBE V-38443
+
 end

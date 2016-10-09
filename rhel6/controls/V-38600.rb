@@ -13,18 +13,18 @@ control 'V-38600' do
   desc '
 Sending ICMP redirects permits the system to instruct other systems to update their routing information. The ability to send ICMP redirects is only appropriate for systems acting as routers.
 '
-  tag 'stig','V-38600'
+  tag 'stig','V-38600','ipv4','icmp'
   tag severity: 'medium'
   tag checkid: 'C-46157r2_chk'
   tag fixid: 'F-43547r1_fix'
   tag version: 'RHEL-06-000080'
   tag ruleid: 'SV-50401r2_rule'
   tag fixtext: '
-To set the runtime status of the "net.ipv4.conf.default.send_redirects" kernel parameter, run the following command: 
+To set the runtime status of the "net.ipv4.conf.default.send_redirects" kernel parameter, run the following command:
 
 # sysctl -w net.ipv4.conf.default.send_redirects=0
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 net.ipv4.conf.default.send_redirects = 0
 '
@@ -37,12 +37,13 @@ The output of the command should indicate a value of "0". If this value is not t
 
 $ grep net.ipv4.conf.default.send_redirects /etc/sysctl.conf
 
-If the correct value is not returned, this is a finding. 
+If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38600
+  describe kernel_parameter('net.ipv4.conf.default.send_redirects') do
+    its('value') { should eq 0 }
+  end
+# END_DESCRIBE V-38600
+
 end

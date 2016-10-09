@@ -23,7 +23,7 @@ Allowing insecure file locking could allow for sensitive data to be viewed or ed
 By default the NFS server requires secure file-lock requests, which require credentials from the client in order to lock a file. Most NFS clients send credentials with file lock requests, however, there are a few clients that do not send credentials when requesting a file-lock, allowing the client to only be able to lock world-readable files. To get around this, the "insecure_locks" option can be used so these clients can access the desired export. This poses a security risk by potentially allowing the client access to data for which it does not have authorization. Remove any instances of the "insecure_locks" option from the file "/etc/exports".
 '
   tag checktext: '
-To verify insecure file locking has been disabled, run the following command: 
+To verify insecure file locking has been disabled, run the following command:
 
 # grep insecure_locks /etc/exports
 
@@ -31,9 +31,11 @@ To verify insecure file locking has been disabled, run the following command:
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38677
+  tag 'nfs','insecure_locks'
+  describe command('grep insecure_locks /etc/exports') do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38677
+
 end

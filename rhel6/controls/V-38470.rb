@@ -13,18 +13,18 @@ control 'V-38470' do
   desc '
 Notifying administrators of an impending disk space problem may allow them to take corrective action prior to any disruption.
 '
-  tag 'stig','V-38470'
+  tag 'stig','V-38470','audit'
   tag severity: 'medium'
   tag checkid: 'C-46025r3_chk'
   tag fixid: 'F-43415r2_fix'
   tag version: 'RHEL-06-000005'
   tag ruleid: 'SV-50270r2_rule'
   tag fixtext: '
-The "auditd" service can be configured to take an action when disk space starts to run low. Edit the file "/etc/audit/auditd.conf". Modify the following line, substituting [ACTION] appropriately: 
+The "auditd" service can be configured to take an action when disk space starts to run low. Edit the file "/etc/audit/auditd.conf". Modify the following line, substituting [ACTION] appropriately:
 
 space_left_action = [ACTION]
 
-Possible values for [ACTION] are described in the "auditd.conf" man page. These include: 
+Possible values for [ACTION] are described in the "auditd.conf" man page. These include:
 
 "ignore"
 "syslog"
@@ -40,7 +40,7 @@ Set this to "email" (instead of the default, which is "suspend") as it is more l
 RHEL-06-000521 ensures that the email generated through the operation "space_left_action" will be sent to an administrator.
 '
   tag checktext: '
-Inspect "/etc/audit/auditd.conf" and locate the following line to determine if the system is configured to email the administrator when disk space is starting to run low: 
+Inspect "/etc/audit/auditd.conf" and locate the following line to determine if the system is configured to email the administrator when disk space is starting to run low:
 
 # grep space_left_action /etc/audit/auditd.conf
 space_left_action = email
@@ -49,9 +49,13 @@ space_left_action = email
 If the system is not configured to send an email to the system administrator when disk space is starting to run low, this is a finding.  The "syslog" option is acceptable when it can be demonstrated that the local log management infrastructure notifies an appropriate administrator in a timely manner.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38470
+  # we're going to accept syslog, email, or exec as OK, but you may need to prove sysadmin sees it.
+  describe auditd_conf do
+    its('space_left_action') { should_not cmp 'suspend' }
+    its('space_left_action') { should_not cmp 'ignore' }
+    its('space_left_action') { should_not cmp 'halt' }
+  end
+# END_DESCRIBE V-38470
+
 end

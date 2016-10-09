@@ -37,9 +37,10 @@ Query the Postfix alias maps for an alias for "root":
 If there are no aliases configured for root that forward to a monitored email address, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38446
+  describe file('/etc/aliases') do
+    its('content') { should match /^root:/ }
+  end
+# END_DESCRIBE V-38446
+
 end

@@ -20,24 +20,27 @@ Arbitrary changes to the system time can be used to obfuscate nefarious activiti
   tag version: 'RHEL-06-000173'
   tag ruleid: 'SV-50331r1_rule'
   tag fixtext: '
-Add the following to "/etc/audit/audit.rules": 
+Add the following to "/etc/audit/audit.rules":
 
 -w /etc/localtime -p wa -k audit_time_rules
 
 The -k option allows for the specification of a key in string form that can be used for better reporting capability through ausearch and aureport and should always be used.
 '
   tag checktext: '
-To determine if the system is configured to audit attempts to alter time via the /etc/localtime file, run the following command: 
+To determine if the system is configured to audit attempts to alter time via the /etc/localtime file, run the following command:
 
 # auditctl -l | grep "watch=/etc/localtime"
 
-If the system is configured to audit this activity, it will return a line. 
+If the system is configured to audit this activity, it will return a line.
 If the system is not configured to audit time changes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38530
+describe auditd_rules do
+  its('lines') { should include("-w /etc/localtime -p wa -k audit_time_rules") }
 end
+# END_DESCRIBE V-38530
+
+end
+
+#'exit,always watch=/etc/group perm=wa',

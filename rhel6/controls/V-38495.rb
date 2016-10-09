@@ -20,22 +20,25 @@ If non-privileged users can write to audit logs, audit trails can be modified or
   tag version: 'RHEL-06-000384'
   tag ruleid: 'SV-50296r1_rule'
   tag fixtext: '
-Change the owner of the audit log files with the following command: 
+Change the owner of the audit log files with the following command:
 
 # chown root [audit_file]
 '
   tag checktext: '
-Run the following command to check the owner of the system audit logs: 
+Run the following command to check the owner of the system audit logs:
 
 grep "^log_file" /etc/audit/auditd.conf|sed s/^[^\/]*//|xargs stat -c %U:%n
 
-Audit logs must be owned by root. 
+Audit logs must be owned by root.
 If they are not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38495
+  Dir['/var/log/audit/*'].each do |log|
+    describe file(log) do
+      its('owner') { should eq 'root' }
+    end
+  end
+# END_DESCRIBE V-38495
+
 end

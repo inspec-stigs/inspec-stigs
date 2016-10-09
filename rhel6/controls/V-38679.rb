@@ -20,7 +20,7 @@ DHCP relies on trusting the local network. If the local network is not trusted, 
   tag version: 'RHEL-06-000292'
   tag ruleid: 'SV-50480r2_rule'
   tag fixtext: '
-For each interface [IFACE] on the system (e.g. eth0), edit "/etc/sysconfig/network-scripts/ifcfg-[IFACE]" and make the following changes. 
+For each interface [IFACE] on the system (e.g. eth0), edit "/etc/sysconfig/network-scripts/ifcfg-[IFACE]" and make the following changes.
 
 Correct the BOOTPROTO line to read:
 
@@ -34,7 +34,7 @@ IPADDR=[assigned IP address]
 GATEWAY=[local LAN default gateway]
 '
   tag checktext: '
-To verify that DHCP is not being used, examine the following file for each interface. 
+To verify that DHCP is not being used, examine the following file for each interface.
 
 # /etc/sysconfig/network-scripts/ifcfg-[IFACE]
 
@@ -54,9 +54,10 @@ GATEWAY=[local LAN default gateway]
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38679
+  tag 'dhcp','untestable'
+  # no good way to check for "if not needed" especially
+  # as a lot of cloud resources use dhcp
+# END_DESCRIBE V-38679
+
 end

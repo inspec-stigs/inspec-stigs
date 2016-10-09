@@ -33,14 +33,17 @@ The owner of all log files written by "rsyslog" should be root. These log files 
 
 $ ls -l [LOGFILE]
 
-Some log files referenced in /etc/rsyslog.conf may be created by other programs and may require exclusion from consideration. 
+Some log files referenced in /etc/rsyslog.conf may be created by other programs and may require exclusion from consideration.
 
-If the owner is not root, this is a finding. 
+If the owner is not root, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38518
+  ["messages","secure","maillog","cron","spooler","boot.log"].each do |log|
+    describe file("/var/log/#{log}") do
+      its('owner') { should eq 'root' }
+    end
+  end
+# END_DESCRIBE V-38518
+
 end

@@ -40,9 +40,11 @@ Verify the keybindings for the Gnome screensaver:
 If no output is visible, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38474
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gnome_settings_daemon/keybindings/screensaver') do
+    its('stdout') { should_not eq '' }
+  end
+# END_DESCRIBE V-38474
+
 end

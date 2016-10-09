@@ -23,17 +23,19 @@ Inconsistency in GIDs between /etc/passwd and /etc/group could lead to a user ha
 Add a group to the system for each GID referenced without a corresponding group.
 '
   tag checktext: '
-To ensure all GIDs referenced in /etc/passwd are defined in /etc/group, run the following command: 
+To ensure all GIDs referenced in /etc/passwd are defined in /etc/group, run the following command:
 
 # pwck -r | grep \'no group\'
 
-There should be no output. 
+There should be no output.
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38681
+  tag 'gid','groups','passwd'
+  describe command("pwck -r | grep \'no group\'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38681
+
 end

@@ -37,9 +37,11 @@ To verify the "all_squash" option has been disabled, run the following command:
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38460
+  only_if { file('/etc/exports').exist? }
+  describe file('/etc/exports') do
+    its('content') { should_not match /all_squash/ }
+  end
+# END_DESCRIBE V-38460
+
 end

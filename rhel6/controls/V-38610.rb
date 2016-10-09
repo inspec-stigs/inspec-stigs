@@ -20,16 +20,16 @@ This ensures a user login will be terminated as soon as the "ClientAliveCountMax
   tag version: 'RHEL-06-000231'
   tag ruleid: 'SV-50411r1_rule'
   tag fixtext: '
-To ensure the SSH idle timeout occurs precisely when the "ClientAliveCountMax" is set, edit "/etc/ssh/sshd_config" as follows: 
+To ensure the SSH idle timeout occurs precisely when the "ClientAliveCountMax" is set, edit "/etc/ssh/sshd_config" as follows:
 
 ClientAliveCountMax 0
 '
   tag checktext: '
-To ensure the SSH idle timeout will occur when the "ClientAliveCountMax" is set, run the following command: 
+To ensure the SSH idle timeout will occur when the "ClientAliveCountMax" is set, run the following command:
 
 # grep ClientAliveCountMax /etc/ssh/sshd_config
 
-If properly configured, output should be: 
+If properly configured, output should be:
 
 ClientAliveCountMax 0
 
@@ -37,9 +37,11 @@ ClientAliveCountMax 0
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38610
+  tag 'sshd','ClientAliveCountMax'
+  describe sshd_config do
+    its('ClientAliveCountMax') { should eq '0' }
+  end
+# END_DESCRIBE V-38610
+
 end

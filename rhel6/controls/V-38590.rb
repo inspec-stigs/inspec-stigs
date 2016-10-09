@@ -20,20 +20,20 @@ Installing "screen" ensures a console locking capability is available for users 
   tag version: 'RHEL-06-000071'
   tag ruleid: 'SV-50391r1_rule'
   tag fixtext: '
-To enable console screen locking when in text mode, install the "screen" package: 
+To enable console screen locking when in text mode, install the "screen" package:
 
 # yum install screen
 
-Instruct users to begin new terminal sessions with the following command: 
+Instruct users to begin new terminal sessions with the following command:
 
 $ screen
 
-The console can now be locked with the following key combination: 
+The console can now be locked with the following key combination:
 
 ctrl+a x
 '
   tag checktext: '
-Run the following command to determine if the "screen" package is installed: 
+Run the following command to determine if the "screen" package is installed:
 
 # rpm -q screen
 
@@ -41,9 +41,10 @@ Run the following command to determine if the "screen" package is installed:
 If the package is not installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38590
+  describe package('screen') do
+    it { should be_installed }
+  end
+# END_DESCRIBE V-38590
+
 end

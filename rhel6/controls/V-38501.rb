@@ -20,17 +20,17 @@ Locking out user accounts after a number of incorrect attempts within a specific
   tag version: 'RHEL-06-000357'
   tag ruleid: 'SV-50302r4_rule'
   tag fixtext: '
-Utilizing "pam_faillock.so", the "fail_interval" directive configures the system to lock out accounts after a number of incorrect logon attempts. Modify the content of both "/etc/pam.d/system-auth" and "/etc/pam.d/password-auth" as follows: 
+Utilizing "pam_faillock.so", the "fail_interval" directive configures the system to lock out accounts after a number of incorrect logon attempts. Modify the content of both "/etc/pam.d/system-auth" and "/etc/pam.d/password-auth" as follows:
 
-Add the following line immediately before the "pam_unix.so" statement in the "AUTH" section: 
+Add the following line immediately before the "pam_unix.so" statement in the "AUTH" section:
 
 auth required pam_faillock.so preauth silent deny=3 unlock_time=604800 fail_interval=900
 
-Add the following line immediately after the "pam_unix.so" statement in the "AUTH" section: 
+Add the following line immediately after the "pam_unix.so" statement in the "AUTH" section:
 
 auth [default=die] pam_faillock.so authfail deny=3 unlock_time=604800 fail_interval=900
 
-Add the following line immediately before the "pam_unix.so" statement in the "ACCOUNT" section: 
+Add the following line immediately before the "pam_unix.so" statement in the "ACCOUNT" section:
 
 account required pam_faillock.so
 
@@ -41,12 +41,13 @@ To ensure the failed password attempt policy is configured correctly, run the fo
 
 $ grep pam_faillock /etc/pam.d/system-auth /etc/pam.d/password-auth
 
-For each file, the output should show "fail_interval=<interval-in-seconds>" where "interval-in-seconds" is 900 (15 minutes) or greater. If the "fail_interval" parameter is not set, the default setting of 900 seconds is acceptable. If that is not the case, this is a finding. 
+For each file, the output should show "fail_interval=<interval-in-seconds>" where "interval-in-seconds" is 900 (15 minutes) or greater. If the "fail_interval" parameter is not set, the default setting of 900 seconds is acceptable. If that is not the case, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38501
+  describe command('grep pam_faillock /etc/pam.d/system-auth /etc/pam.d/password-auth') do
+    its('stdout') { should match 'fail_interval=900' }
+  end
+# END_DESCRIBE V-38501
+
 end

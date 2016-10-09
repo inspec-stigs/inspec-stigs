@@ -20,22 +20,22 @@ If users can write to audit logs, audit trails can be modified or destroyed.
   tag version: 'RHEL-06-000383'
   tag ruleid: 'SV-50299r1_rule'
   tag fixtext: '
-Change the mode of the audit log files with the following command: 
+Change the mode of the audit log files with the following command:
 
 # chmod 0640 [audit_file]
 '
   tag checktext: '
-Run the following command to check the mode of the system audit logs: 
+Run the following command to check the mode of the system audit logs:
 
 grep "^log_file" /etc/audit/auditd.conf|sed s/^[^\/]*//|xargs stat -c %a:%n
 
-Audit logs must be mode 0640 or less permissive. 
+Audit logs must be mode 0640 or less permissive.
 If any are more permissive, this is a finding.
 '
+  Dir['/var/log/audit/*'].each do |log|
+    describe file(log) do
+      its('mode') { should cmp '0640' }
+    end
+  end
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
 end

@@ -20,7 +20,7 @@ The addition/removal of kernel modules can be used to alter the behavior of the 
   tag version: 'RHEL-06-000202'
   tag ruleid: 'SV-50381r2_rule'
   tag fixtext: '
-Add the following to "/etc/audit/audit.rules" in order to capture kernel module loading and unloading events, setting ARCH to either b32 or b64 as appropriate for your system: 
+Add the following to "/etc/audit/audit.rules" in order to capture kernel module loading and unloading events, setting ARCH to either b32 or b64 as appropriate for your system:
 
 -w /sbin/insmod -p x -k modules
 -w /sbin/rmmod -p x -k modules
@@ -40,20 +40,32 @@ To determine if the system is configured to audit calls to the "init_module" sys
 
 $ sudo grep -w "init_module" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return a line. 
+If the system is configured to audit this activity, it will return a line.
 
 To determine if the system is configured to audit calls to the "delete_module" system call, run the following command:
 
 $ sudo grep -w "delete_module" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return a line. 
+If the system is configured to audit this activity, it will return a line.
 
-If no line is returned for any of these commands, this is a finding. 
+If no line is returned for any of these commands, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38580
+  [
+    '-w /sbin/insmod -p x -k modules',
+    '-w /sbin/rmmod -p x -k modules',
+    '-w /sbin/modprobe -p x -k modules'
+  ].each do |line|
+    describe auditd_rules do
+      its('lines') { should include(line) }
+    end
+  end
+  ['init_module','delete_module'].each do |syscall|
+    describe auditd_rules.syscall(syscall).action do
+      it { should eq(['always']) }
+    end
+  end
+# END_DESCRIBE V-38580
+
 end

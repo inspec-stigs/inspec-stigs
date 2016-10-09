@@ -20,14 +20,14 @@ Removing the "xinetd" package decreases the risk of the xinetd service\'s accide
   tag version: 'RHEL-06-000204'
   tag ruleid: 'SV-50385r1_rule'
   tag fixtext: '
-The "xinetd" package can be uninstalled with the following command: 
+The "xinetd" package can be uninstalled with the following command:
 
 # yum erase xinetd
 '
   tag checktext: '
 If network services are using the xinetd service, this is not applicable.
 
-Run the following command to determine if the "xinetd" package is installed: 
+Run the following command to determine if the "xinetd" package is installed:
 
 # rpm -q xinetd
 
@@ -35,9 +35,10 @@ Run the following command to determine if the "xinetd" package is installed:
 If the package is installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38584
+  describe package('xinetd') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38584
+
 end

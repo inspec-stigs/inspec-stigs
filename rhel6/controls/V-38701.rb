@@ -20,12 +20,12 @@ Using the "-s" option causes the TFTP service to only serve files from the given
   tag version: 'RHEL-06-000338'
   tag ruleid: 'SV-50502r1_rule'
   tag fixtext: '
-If running the "tftp" service is necessary, it should be configured to change its root directory at startup. To do so, ensure "/etc/xinetd.d/tftp" includes "-s" as a command line argument, as shown in the following example (which is also the default): 
+If running the "tftp" service is necessary, it should be configured to change its root directory at startup. To do so, ensure "/etc/xinetd.d/tftp" includes "-s" as a command line argument, as shown in the following example (which is also the default):
 
 server_args = -s /var/lib/tftpboot
 '
   tag checktext: '
-Verify "tftp" is configured by with the "-s" option by running the following command: 
+Verify "tftp" is configured by with the "-s" option by running the following command:
 
 grep "server_args" /etc/xinetd.d/tftp
 
@@ -37,9 +37,9 @@ server_args = -s /var/lib/tftpboot
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38701
+  # no good way to ensure its set everywhere...
+  # plus V-38584 specifies not to install xinetd
+# END_DESCRIBE V-38701
+
 end

@@ -20,12 +20,12 @@ The actions taken by system administrators should be audited to keep a record of
   tag version: 'RHEL-06-000201'
   tag ruleid: 'SV-50379r1_rule'
   tag fixtext: '
-At a minimum, the audit system should collect administrator actions for all users and root. Add the following to "/etc/audit/audit.rules": 
+At a minimum, the audit system should collect administrator actions for all users and root. Add the following to "/etc/audit/audit.rules":
 
 -w /etc/sudoers -p wa -k actions
 '
   tag checktext: '
-To verify that auditing is configured for system administrator actions, run the following command: 
+To verify that auditing is configured for system administrator actions, run the following command:
 
 # auditctl -l | grep "watch=/etc/sudoers"
 
@@ -33,9 +33,10 @@ To verify that auditing is configured for system administrator actions, run the 
 If there is no output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38578
+  describe auditd_rules do
+    its('lines') { should include("-w /etc/sudoers -p wa -k actions") }
+  end
+# END_DESCRIBE V-38578
+
 end

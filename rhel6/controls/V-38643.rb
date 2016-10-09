@@ -23,16 +23,22 @@ Data in world-writable files can be modified by any user on the system. In almos
 It is generally a good idea to remove global (other) write access to a file when it is discovered. However, check with documentation for specific applications before making changes. Also, monitor for recurring world-writable files, as these may be symptoms of a misconfigured application or user account.
 '
   tag checktext: '
-To find world-writable files, run the following command for each local partition [PART], excluding special filesystems such as /selinux, /proc, or /sys: 
+To find world-writable files, run the following command for each local partition [PART], excluding special filesystems such as /selinux, /proc, or /sys:
 
 # find [PART] -xdev -type f -perm -002
 
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38643
+  tag 'files','world-writable'
+  ['/tmp','/var','/var/log','usr','usr/local','/','/home','/root'].each do |part|
+    if mount(part).mounted?
+      describe command("find #{part} -xdev -type f -perm -002") do
+        its('stdout') { should eq "" }
+      end
+    end
+  end
+# END_DESCRIBE V-38643
+
 end

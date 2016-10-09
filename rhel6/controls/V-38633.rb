@@ -20,14 +20,14 @@ The total storage for audit log files must be large enough to retain log informa
   tag version: 'RHEL-06-000160'
   tag ruleid: 'SV-50434r1_rule'
   tag fixtext: '
-Determine the amount of audit data (in megabytes) which should be retained in each log file. Edit the file "/etc/audit/auditd.conf". Add or modify the following line, substituting the correct value for [STOREMB]: 
+Determine the amount of audit data (in megabytes) which should be retained in each log file. Edit the file "/etc/audit/auditd.conf". Add or modify the following line, substituting the correct value for [STOREMB]:
 
 max_log_file = [STOREMB]
 
 Set the value to "6" (MB) or higher for general-purpose systems. Larger values, of course, support retention of even more audit data.
 '
   tag checktext: '
-Inspect "/etc/audit/auditd.conf" and locate the following line to determine how much data the system will retain in each audit log file: "# grep max_log_file /etc/audit/auditd.conf" 
+Inspect "/etc/audit/auditd.conf" and locate the following line to determine how much data the system will retain in each audit log file: "# grep max_log_file /etc/audit/auditd.conf"
 
 max_log_file = 6
 
@@ -35,9 +35,12 @@ max_log_file = 6
 If the system audit data threshold hasn\'t been properly set up, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38633
+  tag 'auditd','auditd.conf','max_log_file'
+  describe parse_config_file("/etc/audit/auditd.conf") do
+    its("max_log_file") { should cmp '6' }
+  end
+
+# END_DESCRIBE V-38633
+
 end

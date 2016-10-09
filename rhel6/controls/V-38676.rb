@@ -20,16 +20,16 @@ Unnecessary packages should not be installed to decrease the attack surface of t
   tag version: 'RHEL-06-000291'
   tag ruleid: 'SV-50477r2_rule'
   tag fixtext: '
-Removing all packages which constitute the X Window System ensures users or malicious software cannot start X. To do so, run the following command: 
+Removing all packages which constitute the X Window System ensures users or malicious software cannot start X. To do so, run the following command:
 
 # yum groupremove "X Window System"
 '
   tag checktext: '
-To ensure the X Windows package group is removed, run the following command: 
+To ensure the X Windows package group is removed, run the following command:
 
 $ rpm -qi xorg-x11-server-common
 
-The output should be: 
+The output should be:
 
 package xorg-x11-server-common is not installed
 
@@ -37,9 +37,11 @@ package xorg-x11-server-common is not installed
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38676
+  tag 'xwindows','package','xorg-x11-server-common'
+  describe package('xorg-x11-server-common') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38676
+
 end

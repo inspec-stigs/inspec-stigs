@@ -20,7 +20,7 @@ An appropriate warning message reinforces policy awareness during the logon proc
   tag version: 'RHEL-06-000324'
   tag ruleid: 'SV-50489r3_rule'
   tag fixtext: '
-To enable displaying a login warning banner in the GNOME Display Manager\'s login screen, run the following command: 
+To enable displaying a login warning banner in the GNOME Display Manager\'s login screen, run the following command:
 
 # gconftool-2 --direct \
 --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory \
@@ -32,17 +32,21 @@ To display a banner, this setting must be enabled and then banner text must also
   tag checktext: '
 If the GConf2 package is not installed, this is not applicable.
 
-To ensure a login warning banner is enabled, run the following: 
+To ensure a login warning banner is enabled, run the following:
 
 $ gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gdm/simple-greeter/banner_message_enable
 
-Search for the "banner_message_enable" schema. If properly configured, the "default" value should be "true". 
+Search for the "banner_message_enable" schema. If properly configured, the "default" value should be "true".
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38688
+  tag 'gconf','GConf2','banner'
+  only_if { package('GConf2').installed? }
+  describe command('gconftool-2 --direct --config-source xml:readwrite:/etc/gconf/gconf.xml.mandatory --get /apps/gdm/simple-greeter/banner_message_enable') do
+    its('stdout') { should match "true" }
+  end
+
+# END_DESCRIBE V-38688
+
 end

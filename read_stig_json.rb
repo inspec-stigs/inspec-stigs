@@ -19,10 +19,6 @@ OptionParser.new do |o|
   o.parse!
 end
 
-puts $input
-puts $dest
-
-
 input = File.read($input)
 
 parsed = JSON.parse(input)
@@ -46,13 +42,31 @@ def impact(input)
   output
 end
 
+def make_inspec_rule(control)
+  inspec_file = "src/inspec/#{control}.rb"
+  if ! File.file?(inspec_file)
+    inspec = <<~HEREDOC
+      # START_DESCRIBE #{control}
+        # describe file('/etc') do
+        #   it { should be_directory }
+        # end
+      # END_DESCRIBE #{control}
+    HEREDOC
+    puts "writing #{inspec_file}"
+    File.write(inspec_file, inspec)
+  else
+    puts "reading #{inspec_file}"
+    inspec = File.read(inspec_file)
+  end
+  inspec
+end
+
 #  describe service('autofs') do
 #    it { should_not be_enabled }
 #    it { should_not be_running }
 #  end
 
 controls = stig['findings'].keys
-#findings = stig['findings']
 
 controls.each do |control|
   finding = stig['findings'][control]
@@ -80,15 +94,11 @@ controls.each do |control|
       tag fixtext: '\n#{safe(finding['fixtext'])}\n'
       tag checktext: '\n#{safe(finding['checktext'])}\n'
 
-    # START_CHECKS
-      # describe file('/etc') do
-      #  it { should be_directory }
-      #end
-    # END_CHECKS
+    #{make_inspec_rule(control)}
     end
   HEREDOC
 
-  File.write("#{$dest}/#{control}.rb", output)
+  #File.write("#{$dest}/#{control}.rb", output)
 
 end
 

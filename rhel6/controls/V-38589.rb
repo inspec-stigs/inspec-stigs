@@ -22,12 +22,12 @@ Mitigation:  If an enabled telnet daemon is configured to only allow encrypted s
   tag version: 'RHEL-06-000211'
   tag ruleid: 'SV-50390r2_rule'
   tag fixtext: '
-The "telnet" service can be disabled with the following command: 
+The "telnet" service can be disabled with the following command:
 
 # chkconfig telnet off
 '
   tag checktext: '
-To check that the "telnet" service is disabled in system boot configuration, run the following command: 
+To check that the "telnet" service is disabled in system boot configuration, run the following command:
 
 # chkconfig "telnet" --list
 
@@ -42,9 +42,11 @@ error reading information on service telnet: No such file or directory
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38589
+  describe service('telnet') do
+    it { should_not be_running }
+    it { should_not be_enabled }
+  end
+# END_DESCRIBE V-38589
+
 end

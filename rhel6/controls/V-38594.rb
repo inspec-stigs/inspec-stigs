@@ -20,7 +20,7 @@ The rsh service uses unencrypted network communications, which means that data f
   tag version: 'RHEL-06-000214'
   tag ruleid: 'SV-50395r2_rule'
   tag fixtext: '
-The "rsh" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rsh" service can be disabled with the following command: 
+The "rsh" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rsh" service can be disabled with the following command:
 
 # chkconfig rsh off
 '
@@ -40,9 +40,11 @@ error reading information on service rsh: No such file or directory
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38594
+  describe service('rsh') do
+    it { should_not be_enabled }
+    it { should_not be_running }
+  end
+# END_DESCRIBE V-38594
+
 end

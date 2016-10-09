@@ -20,7 +20,7 @@ The rexec service uses unencrypted network communications, which means that data
   tag version: 'RHEL-06-000216'
   tag ruleid: 'SV-50399r2_rule'
   tag fixtext: '
-The "rexec" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rexec" service can be disabled with the following command: 
+The "rexec" service, which is available with the "rsh-server" package and runs as a service through xinetd, should be disabled. The "rexec" service can be disabled with the following command:
 
 # chkconfig rexec off
 '
@@ -40,9 +40,11 @@ error reading information on service rexec: No such file or directory
 If the service is running, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38598
+  describe service('rexec') do
+    it { should_not be_enabled }
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38598
+
 end

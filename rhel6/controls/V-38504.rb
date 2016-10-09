@@ -20,22 +20,23 @@ The "/etc/shadow" file contains the list of local system accounts and stores pas
   tag version: 'RHEL-06-000035'
   tag ruleid: 'SV-50305r1_rule'
   tag fixtext: '
-To properly set the permissions of "/etc/shadow", run the command: 
+To properly set the permissions of "/etc/shadow", run the command:
 
 # chmod 0000 /etc/shadow
 '
   tag checktext: '
-To check the permissions of "/etc/shadow", run the command: 
+To check the permissions of "/etc/shadow", run the command:
 
 $ ls -l /etc/shadow
 
-If properly configured, the output should indicate the following permissions: "----------" 
+If properly configured, the output should indicate the following permissions: "----------"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38504
+  describe file('/etc/shadow') do
+    its('mode') { should cmp '0000' }
+  end
+# END_DESCRIBE V-38504
+
 end

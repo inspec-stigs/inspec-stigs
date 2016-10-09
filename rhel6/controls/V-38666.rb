@@ -20,11 +20,11 @@ Virus scanning software can be used to detect if a system has been compromised b
   tag version: 'RHEL-06-000284'
   tag ruleid: 'SV-50467r2_rule'
   tag fixtext: '
-Install virus scanning software, which uses signatures to search for the presence of viruses on the filesystem. 
+Install virus scanning software, which uses signatures to search for the presence of viruses on the filesystem.
 
-The McAfee VirusScan Enterprise for Linux virus scanning tool is provided for DoD systems. Ensure virus definition files are no older than 7 days, or their last release. 
+The McAfee VirusScan Enterprise for Linux virus scanning tool is provided for DoD systems. Ensure virus definition files are no older than 7 days, or their last release.
 
-Configure the virus scanning software to perform scans dynamically on all accessed files. If this is not possible, configure the system to scan all altered files on the system on a daily basis. If the system processes inbound SMTP mail, configure the virus scanner to scan all received mail. 
+Configure the virus scanning software to perform scans dynamically on all accessed files. If this is not possible, configure the system to scan all altered files on the system on a daily basis. If the system processes inbound SMTP mail, configure the virus scanner to scan all received mail.
 '
   tag checktext: '
 Inspect the system for a cron job or system service which executes a virus scanning tool regularly.
@@ -37,12 +37,12 @@ To check on the age of uvscan virus definition files, run the following command:
 # cd /opt/NAI/LinuxShield/engine/dat
 # ls -la avvscan.dat avvnames.dat avvclean.dat
 
-If virus scanning software does not run continuously, or at least daily, or has signatures that are out of date, this is a finding. 
+If virus scanning software does not run continuously, or at least daily, or has signatures that are out of date, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38666
+  tag 'virus','untestable'
+  # untestable... can't know about all virus scanners
+# END_DESCRIBE V-38666
+
 end

@@ -20,7 +20,7 @@ In addition to auditing new user and group accounts, these watches will alert th
   tag version: 'RHEL-06-000174'
   tag ruleid: 'SV-50332r1_rule'
   tag fixtext: '
-Add the following to "/etc/audit/audit.rules", in order to capture events that modify account changes: 
+Add the following to "/etc/audit/audit.rules", in order to capture events that modify account changes:
 
 # audit_account_changes
 -w /etc/group -p wa -k audit_account_changes
@@ -30,17 +30,20 @@ Add the following to "/etc/audit/audit.rules", in order to capture events that m
 -w /etc/security/opasswd -p wa -k audit_account_changes
 '
   tag checktext: '
-To determine if the system is configured to audit account changes, run the following command: 
+To determine if the system is configured to audit account changes, run the following command:
 
 auditctl -l | egrep \'(/etc/passwd|/etc/shadow|/etc/group|/etc/gshadow|/etc/security/opasswd)\'
 
-If the system is configured to watch for account changes, lines should be returned for each file specified (and with "perm=wa" for each). 
+If the system is configured to watch for account changes, lines should be returned for each file specified (and with "perm=wa" for each).
 If the system is not configured to audit account changes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38531
+  ['/etc/group','/etc/passwd','/etc/gshadow','/etc/shadow','/etc/security/opasswd'].each do |file|
+    describe auditd_rules do
+      its('lines') { should include("-w #{file} -p wa -k audit_account_changes") }
+    end
+  end
+# END_DESCRIBE V-38531
+
 end

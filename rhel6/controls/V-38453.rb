@@ -13,20 +13,20 @@ control 'V-38453' do
   desc '
 Group-ownership of system binaries and configuration files that is incorrect could allow an unauthorized user to gain privileges that they should not have. The group-ownership set by the vendor should be maintained. Any deviations from this baseline should be investigated.
 '
-  tag 'stig','V-38453'
+  tag 'stig','V-38453','long','rpm'
   tag severity: 'low'
   tag checkid: 'C-46009r1_chk'
   tag fixid: 'F-43399r1_fix'
   tag version: 'RHEL-06-000517'
   tag ruleid: 'SV-50253r1_rule'
   tag fixtext: '
-The RPM package management system can restore group-ownership of the package files and directories. The following command will update files and directories with group-ownership different from what is expected by the RPM database: 
+The RPM package management system can restore group-ownership of the package files and directories. The following command will update files and directories with group-ownership different from what is expected by the RPM database:
 
 # rpm -qf [file or directory name]
 # rpm --setugids [package]
 '
   tag checktext: '
-The following command will list which files on the system have group-ownership different from what is expected by the RPM database: 
+The following command will list which files on the system have group-ownership different from what is expected by the RPM database:
 
 # rpm -Va | grep \'^......G\'
 
@@ -34,9 +34,10 @@ The following command will list which files on the system have group-ownership d
 If there is output, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38453
+  describe command("rpm -Va | grep '^......G'") do
+    its('stdout') { should eq '' }
+  end
+# END_DESCRIBE V-38453
+
 end

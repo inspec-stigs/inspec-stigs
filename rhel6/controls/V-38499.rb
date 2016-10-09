@@ -13,7 +13,7 @@ control 'V-38499' do
   desc '
 The hashes for all user account passwords should be stored in the file "/etc/shadow" and never in "/etc/passwd", which is readable by all users.
 '
-  tag 'stig','V-38499'
+  tag 'stig','V-38499','password','passwd'
   tag severity: 'medium'
   tag checkid: 'C-46056r1_chk'
   tag fixid: 'F-43446r1_fix'
@@ -23,17 +23,18 @@ The hashes for all user account passwords should be stored in the file "/etc/sha
 If any password hashes are stored in "/etc/passwd" (in the second field, instead of an "x"), the cause of this misconfiguration should be investigated. The account should have its password reset and the hash should be properly stored, or the account should be deleted entirely.
 '
   tag checktext: '
-To check that no password hashes are stored in "/etc/passwd", run the following command: 
+To check that no password hashes are stored in "/etc/passwd", run the following command:
 
 # awk -F: \'($2 != "x") {print}\' /etc/passwd
 
-If it produces any output, then a password hash is stored in "/etc/passwd". 
+If it produces any output, then a password hash is stored in "/etc/passwd".
 If any stored hashes are found in /etc/passwd, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38499
+  describe command("awk -F: '($2 != \"x\") {print}' /etc/passwd") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38499
+
 end

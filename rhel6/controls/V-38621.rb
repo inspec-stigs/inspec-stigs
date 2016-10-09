@@ -20,18 +20,18 @@ Synchronizing with an NTP server makes it possible to collate system logs from m
   tag version: 'RHEL-06-000248'
   tag ruleid: 'SV-50422r1_rule'
   tag fixtext: '
-To specify a remote NTP server for time synchronization, edit the file "/etc/ntp.conf". Add or correct the following lines, substituting the IP or hostname of a remote NTP server for ntpserver. 
+To specify a remote NTP server for time synchronization, edit the file "/etc/ntp.conf". Add or correct the following lines, substituting the IP or hostname of a remote NTP server for ntpserver.
 
 server [ntpserver]
 
 This instructs the NTP software to contact that remote server to obtain time data.
 '
   tag checktext: '
-A remote NTP server should be configured for time synchronization. To verify one is configured, open the following file. 
+A remote NTP server should be configured for time synchronization. To verify one is configured, open the following file.
 
 /etc/ntp.conf
 
-In the file, there should be a section similar to the following: 
+In the file, there should be a section similar to the following:
 
 # --- OUR TIMESERVERS -----
 server [ntpserver]
@@ -40,9 +40,17 @@ server [ntpserver]
 If this is not the case, this is a finding.
 '
 
-# START_CHECKS
+# START_DESCRIBE V-38621
+  tag 'ntp','ntp.conf'
+  options = {
+    assignment_re: /^(.*?)\s+(.*)$/
+  }
+  describe parse_config_file('/etc/ntp.conf',options) do
+    its('server') { should match /.*/ }
+  end
   # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+  #   it { should be_directory }
+  # end
+# END_DESCRIBE V-38621
+
 end

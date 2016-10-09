@@ -23,17 +23,18 @@ Requiring a minimum number of different characters during password changes ensur
 The pam_cracklib module\'s "difok" parameter controls requirements for usage of different characters during a password change. Add "difok=[NUM]" after pam_cracklib.so to require differing characters when changing passwords, substituting [NUM] appropriately. The DoD requirement is 4.
 '
   tag checktext: '
-To check how many characters must differ during a password change, run the following command: 
+To check how many characters must differ during a password change, run the following command:
 
 $ grep pam_cracklib /etc/pam.d/system-auth
 
-The "difok" parameter will indicate how many characters must differ. The DoD requires four characters differ during a password change. This would appear as "difok=4". 
+The "difok" parameter will indicate how many characters must differ. The DoD requires four characters differ during a password change. This would appear as "difok=4".
 If difok is not found or not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38572
+  describe file('/etc/pam.d/system-auth') do
+    its('content') { should match /pam_cracklib\.so.*?difok=[4-9]+/ }
+  end
+# END_DESCRIBE V-38572
+
 end

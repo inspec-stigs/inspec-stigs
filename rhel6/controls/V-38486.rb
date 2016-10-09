@@ -13,7 +13,7 @@ control 'V-38486' do
   desc '
 Operating system backup is a critical step in maintaining data assurance and availability. System-level information includes system-state information, operating system and application software, and licenses. Backups must be consistent with organizational recovery time and recovery point objectives.
 '
-  tag 'stig','V-38486'
+  tag 'stig','V-38486','untestable'
   tag severity: 'medium'
   tag checkid: 'C-46044r1_chk'
   tag fixid: 'F-43434r1_fix'
@@ -25,14 +25,13 @@ Procedures to back up OS data from the system must be established and executed. 
 Implement a process whereby OS data is backed up from the system in accordance with local policies.
 '
   tag checktext: '
-Ask an administrator if a process exists to back up OS data from the system, including configuration data. 
+Ask an administrator if a process exists to back up OS data from the system, including configuration data.
 
 If such a process does not exist, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38486
+# untestable
+# END_DESCRIBE V-38486
+
 end

@@ -3,6 +3,8 @@
 
 Vagrant.configure(2) do |config|
   config.vm.box = "centos/6"
+  config.vm.synced_folder ".", "/vagrant", type: "nfs"
+  config.vm.network :private_network, ip: "172.16.0.100"
   config.vm.provision "shell", inline: <<-SHELL
 
     if [ ! -e /vagrant/inspec.rpm ]; then

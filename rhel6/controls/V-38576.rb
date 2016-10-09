@@ -20,12 +20,12 @@ Using a stronger hashing algorithm makes password cracking attacks more difficul
   tag version: 'RHEL-06-000063'
   tag ruleid: 'SV-50377r1_rule'
   tag fixtext: '
-In "/etc/login.defs", add or correct the following line to ensure the system will use SHA-512 as the hashing algorithm: 
+In "/etc/login.defs", add or correct the following line to ensure the system will use SHA-512 as the hashing algorithm:
 
 ENCRYPT_METHOD SHA512
 '
   tag checktext: '
-Inspect "/etc/login.defs" and ensure the following line appears: 
+Inspect "/etc/login.defs" and ensure the following line appears:
 
 ENCRYPT_METHOD SHA512
 
@@ -33,9 +33,13 @@ ENCRYPT_METHOD SHA512
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38576
+  options = {
+    assignment_re:  /^(.*?)\s+(.*)$/,
+  }
+  describe parse_config_file('/etc/login.defs', options) do
+   its('ENCRYPT_METHOD') { should eq 'SHA512' }
+  end
+# END_DESCRIBE V-38576
+
 end

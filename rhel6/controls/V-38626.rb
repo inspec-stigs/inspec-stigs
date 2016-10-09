@@ -20,11 +20,11 @@ The tls_cacertdir or tls_cacertfile directives are required when tls_checkpeer i
   tag version: 'RHEL-06-000253'
   tag ruleid: 'SV-50427r1_rule'
   tag fixtext: '
-Ensure a copy of the site\'s CA certificate has been placed in the file "/etc/pki/tls/CA/cacert.pem". Configure LDAP to enforce TLS use and to trust certificates signed by the site\'s CA. First, edit the file "/etc/pam_ldap.conf", and add or correct either of the following lines: 
+Ensure a copy of the site\'s CA certificate has been placed in the file "/etc/pki/tls/CA/cacert.pem". Configure LDAP to enforce TLS use and to trust certificates signed by the site\'s CA. First, edit the file "/etc/pam_ldap.conf", and add or correct either of the following lines:
 
 tls_cacertdir /etc/pki/tls/CA
 
-or 
+or
 
 tls_cacertfile /etc/pki/tls/CA/cacert.pem
 
@@ -33,7 +33,7 @@ Then review the LDAP server and ensure TLS has been configured.
   tag checktext: '
 If the system does not use LDAP for authentication or account information, this is not applicable.
 
-To ensure TLS is configured with trust certificates, run the following command: 
+To ensure TLS is configured with trust certificates, run the following command:
 
 # grep cert /etc/pam_ldap.conf
 
@@ -41,9 +41,22 @@ To ensure TLS is configured with trust certificates, run the following command:
 If there is no output, or the lines are commented out, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38626
+  tag 'pam','ldap','pam_ldap.conf'
+  only_if { file('/etc/pam_ldap.conf').exist? }
+  options = {
+    assignment_re: /^(.*?)\s+(.*)$/
+  }
+  describe.one do
+    describe parse_config_file('/etc/pam_ldap.conf',options) do
+      its('tls_cacertdir') { should eq '/etc/pki/tls/CA' }
+    end
+    describe parse_config_file('/etc/pam_ldap.conf',options) do
+      its('tls_cacertfile') { should eq '/etc/pki/tls/CA/cacert.pem' }
+    end
+  end
+
+
+# END_DESCRIBE V-38626
+
 end

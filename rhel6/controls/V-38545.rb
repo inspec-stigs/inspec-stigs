@@ -20,13 +20,13 @@ The changing of file permissions could indicate that a user is attempting to gai
   tag version: 'RHEL-06-000185'
   tag ruleid: 'SV-50346r3_rule'
   tag fixtext: '
-At a minimum, the audit system should collect file permission changes for all users and root. Add the following to "/etc/audit/audit.rules": 
+At a minimum, the audit system should collect file permission changes for all users and root. Add the following to "/etc/audit/audit.rules":
 
 -a always,exit -F arch=b32 -S chown -F auid>=500 -F auid!=4294967295 \
 -k perm_mod
 -a always,exit -F arch=b32 -S chown -F auid=0 -k perm_mod
 
-If the system is 64-bit, then also add the following: 
+If the system is 64-bit, then also add the following:
 
 -a always,exit -F arch=b64 -S chown -F auid>=500 -F auid!=4294967295 \
 -k perm_mod
@@ -39,12 +39,13 @@ $ sudo grep -w "chown" /etc/audit/audit.rules
 
 If the system is configured to audit this activity, it will return several lines.
 
-If no line is returned, this is a finding. 
+If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38545
+  describe auditd_rules.syscall('chown').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38545
+
 end

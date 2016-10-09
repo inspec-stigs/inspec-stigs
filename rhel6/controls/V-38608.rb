@@ -20,22 +20,22 @@ Causing idle users to be automatically logged out guards against compromises one
   tag version: 'RHEL-06-000230'
   tag ruleid: 'SV-50409r1_rule'
   tag fixtext: '
-SSH allows administrators to set an idle timeout interval. After this interval has passed, the idle user will be automatically logged out. 
+SSH allows administrators to set an idle timeout interval. After this interval has passed, the idle user will be automatically logged out.
 
-To set an idle timeout interval, edit the following line in "/etc/ssh/sshd_config" as follows: 
+To set an idle timeout interval, edit the following line in "/etc/ssh/sshd_config" as follows:
 
 ClientAliveInterval [interval]
 
-The timeout [interval] is given in seconds. To have a timeout of 15 minutes, set [interval] to 900. 
+The timeout [interval] is given in seconds. To have a timeout of 15 minutes, set [interval] to 900.
 
 If a shorter timeout has already been set for the login shell, that value will preempt any SSH setting made here. Keep in mind that some processes may stop SSH from correctly detecting that the user is idle.
 '
   tag checktext: '
-Run the following command to see what the timeout interval is: 
+Run the following command to see what the timeout interval is:
 
 # grep ClientAliveInterval /etc/ssh/sshd_config
 
-If properly configured, the output should be: 
+If properly configured, the output should be:
 
 ClientAliveInterval 900
 
@@ -43,9 +43,11 @@ ClientAliveInterval 900
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38608
+  tag 'sshd','ClientAliveInterval'
+  describe sshd_config do
+    its('ClientAliveInterval') { should eq '900' }
+  end
+# END_DESCRIBE V-38608
+
 end

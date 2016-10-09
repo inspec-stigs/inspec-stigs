@@ -20,22 +20,23 @@ The "/etc/passwd" file contains information about the users that are configured 
   tag version: 'RHEL-06-000039'
   tag ruleid: 'SV-50250r1_rule'
   tag fixtext: '
-To properly set the owner of "/etc/passwd", run the command: 
+To properly set the owner of "/etc/passwd", run the command:
 
 # chown root /etc/passwd
 '
   tag checktext: '
-To check the ownership of "/etc/passwd", run the command: 
+To check the ownership of "/etc/passwd", run the command:
 
 $ ls -l /etc/passwd
 
-If properly configured, the output should indicate the following owner: "root" 
+If properly configured, the output should indicate the following owner: "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38450
+  describe file('/etc/passwd') do
+    its('owner') { should eq 'root' }
+  end
+# END_DESCRIBE V-38450
+
 end

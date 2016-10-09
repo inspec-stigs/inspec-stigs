@@ -20,7 +20,7 @@ Local mail delivery is essential to some system maintenance and notification tas
   tag version: 'RHEL-06-000287'
   tag ruleid: 'SV-50470r1_rule'
   tag fixtext: '
-The Postfix mail transfer agent is used for local mail delivery within the system. The default configuration only listens for connections to the default SMTP port (port 25) on the loopback interface (127.0.0.1). It is recommended to leave this service enabled for local mail delivery. The "postfix" service can be enabled with the following command: 
+The Postfix mail transfer agent is used for local mail delivery within the system. The default configuration only listens for connections to the default SMTP port (port 25) on the loopback interface (127.0.0.1). It is recommended to leave this service enabled for local mail delivery. The "postfix" service can be enabled with the following command:
 
 # chkconfig postfix on
 # service postfix start
@@ -37,9 +37,12 @@ postfix is running...
 If the service is not enabled, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38669
+  tag 'postfix','service'
+  describe service('postfix') do
+    it { should be_enabled }
+    it { should be_running }
+  end
+# END_DESCRIBE V-38669
+
 end

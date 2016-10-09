@@ -20,24 +20,26 @@ The warning message reinforces policy awareness during the logon process and fac
   tag version: 'RHEL-06-000240'
   tag ruleid: 'SV-50416r1_rule'
   tag fixtext: '
-To enable the warning banner and ensure it is consistent across the system, add or correct the following line in "/etc/ssh/sshd_config": 
+To enable the warning banner and ensure it is consistent across the system, add or correct the following line in "/etc/ssh/sshd_config":
 
 Banner /etc/issue
 
 Another section contains information on how to create an appropriate system-wide warning banner.
 '
   tag checktext: '
-To determine how the SSH daemon\'s "Banner" option is set, run the following command: 
+To determine how the SSH daemon\'s "Banner" option is set, run the following command:
 
 # grep -i Banner /etc/ssh/sshd_config
 
-If a line indicating /etc/issue is returned, then the required value is set. 
+If a line indicating /etc/issue is returned, then the required value is set.
 If the required value is not set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38615
+  tag 'sshd','Banner'
+  describe sshd_config do
+    its('Banner') { should eq '/etc/issue' }
+  end
+# END_DESCRIBE V-38615
+
 end

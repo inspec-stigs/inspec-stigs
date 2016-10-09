@@ -20,21 +20,22 @@ In "iptables" the default policy is applied only after all the applicable rules 
   tag version: 'RHEL-06-000120'
   tag ruleid: 'SV-50314r1_rule'
   tag fixtext: '
-To set the default policy to DROP (instead of ACCEPT) for the built-in INPUT chain which processes incoming packets, add or correct the following line in "/etc/sysconfig/iptables": 
+To set the default policy to DROP (instead of ACCEPT) for the built-in INPUT chain which processes incoming packets, add or correct the following line in "/etc/sysconfig/iptables":
 
 :INPUT DROP [0:0]
 '
   tag checktext: '
-Inspect the file "/etc/sysconfig/iptables" to determine the default policy for the INPUT chain. It should be set to DROP. 
+Inspect the file "/etc/sysconfig/iptables" to determine the default policy for the INPUT chain. It should be set to DROP.
 
 # grep ":INPUT" /etc/sysconfig/iptables
 
 If the default policy for the INPUT chain is not set to DROP, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38513
+  describe iptables do
+    it { should have_rule('-P INPUT DROP') }
+  end
+# END_DESCRIBE V-38513
+
 end

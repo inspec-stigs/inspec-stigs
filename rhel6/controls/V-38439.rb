@@ -28,9 +28,8 @@ Interview the SA to determine if there is an automated system for managing user 
 If there is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38439
+# There is no check for this
+# END_DESCRIBE V-38439
+
 end

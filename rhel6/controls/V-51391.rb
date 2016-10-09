@@ -11,7 +11,7 @@ control 'V-51391' do
   impact 0.5
   title 'A file integrity baseline must be created.'
   desc '
-For AIDE to be effective, an initial database of "known-good" information about files must be captured and it should be able to be verified against the installed files. 
+For AIDE to be effective, an initial database of "known-good" information about files must be captured and it should be able to be verified against the installed files.
 '
   tag 'stig','V-51391'
   tag severity: 'medium'
@@ -32,7 +32,7 @@ To initiate a manual check, run the following command:
 
 # /usr/sbin/aide --check
 
-If this check produces any unexpected output, investigate. 
+If this check produces any unexpected output, investigate.
 '
   tag checktext: '
 To find the location of the AIDE database file, run the following command:
@@ -43,12 +43,17 @@ Using the defined values of the [DBDIR] and [database] variables, verify the exi
 
 # ls -l [DBDIR]/[database_file_name]
 
-If there is no database file, this is a finding. 
+If there is no database file, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-51391
+  tag 'aide','aide.conf'
+  describe file('/var/lib/aide/aide.db.gz') do
+    it { should exist }
+  end
+  describe file('/etc/aide.conf') do
+    its('content') { should match "@@define DBDIR /var/lib/aide" }
+  end
+# END_DESCRIBE V-51391
+
 end

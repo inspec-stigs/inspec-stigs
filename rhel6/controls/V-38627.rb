@@ -20,18 +20,18 @@ Unnecessary packages should not be installed to decrease the attack surface of t
   tag version: 'RHEL-06-000256'
   tag ruleid: 'SV-50428r1_rule'
   tag fixtext: '
-The "openldap-servers" package should be removed if not in use. Is this machine the OpenLDAP server? If not, remove the package. 
+The "openldap-servers" package should be removed if not in use. Is this machine the OpenLDAP server? If not, remove the package.
 
 # yum erase openldap-servers
 
 The openldap-servers RPM is not installed by default on RHEL6 machines. It is needed only by the OpenLDAP server, not by the clients which use LDAP for authentication. If the system is not intended for use as an LDAP Server it should be removed.
 '
   tag checktext: '
-To verify the "openldap-servers" package is not installed, run the following command: 
+To verify the "openldap-servers" package is not installed, run the following command:
 
 $ rpm -q openldap-servers
 
-The output should show the following. 
+The output should show the following.
 
 package openldap-servers is not installed
 
@@ -39,9 +39,11 @@ package openldap-servers is not installed
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38627
+  tag 'openldap-servers','package'
+  describe package('openldap-servers') do
+    it { should_not be_installed }
+  end
+# END_DESCRIBE V-38627
+
 end

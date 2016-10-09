@@ -20,13 +20,13 @@ The changing of file permissions could indicate that a user is attempting to gai
   tag version: 'RHEL-06-000184'
   tag ruleid: 'SV-50344r3_rule'
   tag fixtext: '
-At a minimum, the audit system should collect file permission changes for all users and root. Add the following to "/etc/audit/audit.rules": 
+At a minimum, the audit system should collect file permission changes for all users and root. Add the following to "/etc/audit/audit.rules":
 
 -a always,exit -F arch=b32 -S chmod -F auid>=500 -F auid!=4294967295 \
 -k perm_mod
 -a always,exit -F arch=b32 -S chmod -F auid=0 -k perm_mod
 
-If the system is 64-bit, then also add the following: 
+If the system is 64-bit, then also add the following:
 
 -a always,exit -F arch=b64 -S chmod -F auid>=500 -F auid!=4294967295 \
 -k perm_mod
@@ -37,14 +37,15 @@ To determine if the system is configured to audit calls to the "chmod" system ca
 
 $ sudo grep -w "chmod" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return several lines. 
+If the system is configured to audit this activity, it will return several lines.
 
-If the system is not configured to audit permission changes, this is a finding. 
+If the system is not configured to audit permission changes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38543
+  describe auditd_rules.syscall('chmod').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38543
+
 end

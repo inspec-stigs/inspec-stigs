@@ -11,7 +11,7 @@ control 'V-51369' do
   impact 0.1
   title 'The system must use a Linux Security Module configured to limit the privileges of system services.'
   desc '
-Setting the SELinux policy to "targeted" or a more specialized policy ensures the system will confine processes that are likely to be targeted for exploitation, such as network or system services. 
+Setting the SELinux policy to "targeted" or a more specialized policy ensures the system will confine processes that are likely to be targeted for exploitation, such as network or system services.
 '
   tag 'stig','V-51369'
   tag severity: 'low'
@@ -24,19 +24,21 @@ The SELinux "targeted" policy is appropriate for general-purpose desktops and se
 
 SELINUXTYPE=targeted
 
-Other policies, such as "mls", provide additional security labeling and greater confinement but are not compatible with many general-purpose use cases. 
+Other policies, such as "mls", provide additional security labeling and greater confinement but are not compatible with many general-purpose use cases.
 '
   tag checktext: '
 Check the file "/etc/selinux/config" and ensure the following line appears:
 
 SELINUXTYPE=targeted
 
-If it does not, this is a finding. 
+If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-51369
+  tag 'selinux','targeted','selinuxtype'
+  describe parse_config_file('/etc/selinux/config') do
+    its('SELINUXTYPE') { should eq 'targeted' }
+  end
+# END_DESCRIBE V-51369
+
 end

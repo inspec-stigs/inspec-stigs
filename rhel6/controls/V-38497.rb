@@ -13,7 +13,7 @@ control 'V-38497' do
   desc '
 If an account has an empty password, anyone could log in and run commands with the privileges of that account. Accounts with empty passwords should never be used in operational environments.
 '
-  tag 'stig','V-38497'
+  tag 'stig','V-38497','password'
   tag severity: 'high'
   tag checkid: 'C-46054r2_chk'
   tag fixid: 'F-43444r4_fix'
@@ -23,17 +23,18 @@ If an account has an empty password, anyone could log in and run commands with t
 If an account is configured for password authentication but does not have an assigned password, it may be possible to log onto the account without authentication. Remove any instances of the "nullok" option in "/etc/pam.d/system-auth" to prevent logons with empty passwords.
 '
   tag checktext: '
-To verify that null passwords cannot be used, run the following command: 
+To verify that null passwords cannot be used, run the following command:
 
 # grep nullok /etc/pam.d/system-auth
 
-If this produces any output, it may be possible to log into accounts with empty passwords. 
+If this produces any output, it may be possible to log into accounts with empty passwords.
 If NULL passwords can be used, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38497
+  describe file('/etc/pam.d/system-auth') do
+    its('content') { should_not match "nullok" }
+  end
+# END_DESCRIBE V-38497
+
 end

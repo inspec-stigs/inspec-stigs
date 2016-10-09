@@ -20,24 +20,25 @@ The unauthorized exportation of data to external media could result in an inform
   tag version: 'RHEL-06-000199'
   tag ruleid: 'SV-50369r3_rule'
   tag fixtext: '
-At a minimum, the audit system should collect media exportation events for all users and root. Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system: 
+At a minimum, the audit system should collect media exportation events for all users and root. Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system:
 
 -a always,exit -F arch=ARCH -S mount -F auid>=500 -F auid!=4294967295 -k export
 -a always,exit -F arch=ARCH -S mount -F auid=0 -k export
 '
   tag checktext: '
-To verify that auditing is configured for all media exportation events, run the following command: 
+To verify that auditing is configured for all media exportation events, run the following command:
 
 $ sudo grep -w "mount" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return several lines. 
+If the system is configured to audit this activity, it will return several lines.
 
-If no line is returned, this is a finding. 
+If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38568
+  describe auditd_rules.syscall('mount').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38568
+
 end

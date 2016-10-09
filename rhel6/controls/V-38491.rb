@@ -20,7 +20,7 @@ Trust files are convenient, but when used in conjunction with the R-services, th
   tag version: 'RHEL-06-000019'
   tag ruleid: 'SV-50292r1_rule'
   tag fixtext: '
-The files "/etc/hosts.equiv" and "~/.rhosts" (in each user\'s home directory) list remote hosts and users that are trusted by the local system when using the rshd daemon. To remove these files, run the following command to delete them from any location. 
+The files "/etc/hosts.equiv" and "~/.rhosts" (in each user\'s home directory) list remote hosts and users that are trusted by the local system when using the rshd daemon. To remove these files, run the following command to delete them from any location.
 
 # rm /etc/hosts.equiv
 
@@ -29,13 +29,20 @@ The files "/etc/hosts.equiv" and "~/.rhosts" (in each user\'s home directory) li
 $ rm ~/.rhosts
 '
   tag checktext: '
-The existence of the file "/etc/hosts.equiv" or a file named ".rhosts" inside a user home directory indicates the presence of an Rsh trust relationship. 
+The existence of the file "/etc/hosts.equiv" or a file named ".rhosts" inside a user home directory indicates the presence of an Rsh trust relationship.
 If these files exist, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38491
+  describe file('/etc/hosts.equiv') do
+    it { should_not exist }
+  end
+  describe file('/root/.rhosts') do
+    it { should_not exist }
+  end
+  describe command("find /home -name '.rhosts' -print") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38491
+
 end

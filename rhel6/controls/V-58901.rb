@@ -34,9 +34,8 @@ Verify neither the "NOPASSWD" option nor the "!authenticate" option is configure
 If the "NOPASSWD" or "!authenticate" options are configured for use in "/etc/sudoers" or associated files, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-58901
+  # not testing this as almost all clouds use NOPASSWD for default user
+# END_DESCRIBE V-58901
+
 end

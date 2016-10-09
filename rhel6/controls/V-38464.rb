@@ -13,18 +13,18 @@ control 'V-38464' do
   desc '
 Taking appropriate action in case of disk errors will minimize the possibility of losing audit records.
 '
-  tag 'stig','V-38464'
+  tag 'stig','V-38464','audit'
   tag severity: 'medium'
   tag checkid: 'C-46020r1_chk'
   tag fixid: 'F-43410r1_fix'
   tag version: 'RHEL-06-000511'
   tag ruleid: 'SV-50264r1_rule'
   tag fixtext: '
-Edit the file "/etc/audit/auditd.conf". Modify the following line, substituting [ACTION] appropriately: 
+Edit the file "/etc/audit/auditd.conf". Modify the following line, substituting [ACTION] appropriately:
 
 disk_error_action = [ACTION]
 
-Possible values for [ACTION] are described in the "auditd.conf" man page. These include: 
+Possible values for [ACTION] are described in the "auditd.conf" man page. These include:
 
 "ignore"
 "syslog"
@@ -46,9 +46,11 @@ disk_error_action = [ACTION]
 If the system is configured to "suspend" when disk errors occur or "ignore" them, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38464
+  describe auditd_conf do
+    its('disk_error_action') { should_not cmp 'suspend' }
+    its('disk_error_action') { should_not cmp 'ignore' }
+  end
+# END_DESCRIBE V-38464
+
 end

@@ -20,16 +20,16 @@ SSH environment options potentially allow users to bypass access restriction in 
   tag version: 'RHEL-06-000241'
   tag ruleid: 'SV-50417r1_rule'
   tag fixtext: '
-To ensure users are not able to present environment options to the SSH daemon, add or correct the following line in "/etc/ssh/sshd_config": 
+To ensure users are not able to present environment options to the SSH daemon, add or correct the following line in "/etc/ssh/sshd_config":
 
 PermitUserEnvironment no
 '
   tag checktext: '
-To ensure users are not able to present environment daemons, run the following command: 
+To ensure users are not able to present environment daemons, run the following command:
 
 # grep PermitUserEnvironment /etc/ssh/sshd_config
 
-If properly configured, output should be: 
+If properly configured, output should be:
 
 PermitUserEnvironment no
 
@@ -37,9 +37,11 @@ PermitUserEnvironment no
 If it is not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38616
+  tag 'sshd','PermitUserEnvironment'
+  describe sshd_config do
+    its('PermitUserEnvironment') { should eq 'no' }
+  end
+# END_DESCRIBE V-38616
+
 end

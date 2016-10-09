@@ -11,7 +11,7 @@ control 'V-51875' do
   impact 0.5
   title 'The operating system, upon successful logon/access, must display to the user the number of unsuccessful logon/access attempts since the last successful logon/access.'
   desc '
-Users need to be aware of activity that occurs regarding their account. Providing users with information regarding the number of unsuccessful attempts that were made to login to their account allows the user to determine if any unauthorized activity has occurred and gives them an opportunity to notify administrators. 
+Users need to be aware of activity that occurs regarding their account. Providing users with information regarding the number of unsuccessful attempts that were made to login to their account allows the user to determine if any unauthorized activity has occurred and gives them an opportunity to notify administrators.
 '
   tag 'stig','V-51875'
   tag severity: 'medium'
@@ -29,12 +29,14 @@ To ensure that last logon/access notification is configured correctly, run the f
 
 # grep pam_lastlog.so /etc/pam.d/system-auth
 
-The output should show output "showfailed". If that is not the case, this is a finding. 
+The output should show output "showfailed". If that is not the case, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-51875
+  tag 'pam','login','system-auth','showfailed'
+  describe file('/etc/pam.d/system-auth') do
+    its('content') { should match /pam_lastlog.*?showfailed/ }
+  end
+# END_DESCRIBE V-51875
+
 end

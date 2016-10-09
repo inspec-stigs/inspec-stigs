@@ -20,14 +20,14 @@ The AIDE package must be installed if it is to be available for integrity checki
   tag version: 'RHEL-06-000016'
   tag ruleid: 'SV-50290r1_rule'
   tag fixtext: '
-Install the AIDE package with the command: 
+Install the AIDE package with the command:
 
 # yum install aide
 '
   tag checktext: '
 If another file integrity tool is installed, this is not a finding.
 
-Run the following command to determine if the "aide" package is installed: 
+Run the following command to determine if the "aide" package is installed:
 
 # rpm -q aide
 
@@ -35,9 +35,12 @@ Run the following command to determine if the "aide" package is installed:
 If the package is not installed, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38489
+  file_integrity_tool = 'aide' # change or set to nil if not using aide
+  only_if { file_integrity_tool }
+  describe package(file_integrity_tool) do
+    it { should be_installed }
+  end
+# END_DESCRIBE V-38489
+
 end

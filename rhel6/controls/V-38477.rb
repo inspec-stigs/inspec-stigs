@@ -13,31 +13,32 @@ control 'V-38477' do
   desc '
 Setting the minimum password age protects against users cycling back to a favorite password after satisfying the password reuse requirement.
 '
-  tag 'stig','V-38477'
+  tag 'stig','V-38477','password'
   tag severity: 'medium'
   tag checkid: 'C-46032r1_chk'
   tag fixid: 'F-43422r1_fix'
   tag version: 'RHEL-06-000051'
   tag ruleid: 'SV-50277r1_rule'
   tag fixtext: '
-To specify password minimum age for new accounts, edit the file "/etc/login.defs" and add or correct the following line, replacing [DAYS] appropriately: 
+To specify password minimum age for new accounts, edit the file "/etc/login.defs" and add or correct the following line, replacing [DAYS] appropriately:
 
 PASS_MIN_DAYS [DAYS]
 
 A value of 1 day is considered sufficient for many environments. The DoD requirement is 1.
 '
   tag checktext: '
-To check the minimum password age, run the command: 
+To check the minimum password age, run the command:
 
 $ grep PASS_MIN_DAYS /etc/login.defs
 
-The DoD requirement is 1. 
+The DoD requirement is 1.
 If it is not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38477
+  describe login_defs do
+    its('PASS_MIN_DAYS') { should eq '1' }
+  end
+# END_DESCRIBE V-38477
+
 end

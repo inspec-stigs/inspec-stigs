@@ -20,27 +20,28 @@ Address space layout randomization (ASLR) makes it more difficult for an attacke
   tag version: 'RHEL-06-000078'
   tag ruleid: 'SV-50397r2_rule'
   tag fixtext: '
-To set the runtime status of the "kernel.randomize_va_space" kernel parameter, run the following command: 
+To set the runtime status of the "kernel.randomize_va_space" kernel parameter, run the following command:
 
 # sysctl -w kernel.randomize_va_space=2
 
-If this is not the system\'s default value, add the following line to "/etc/sysctl.conf": 
+If this is not the system\'s default value, add the following line to "/etc/sysctl.conf":
 
 kernel.randomize_va_space = 2
 '
   tag checktext: '
-The status of the "kernel.randomize_va_space" kernel parameter can be queried by running the following commands: 
+The status of the "kernel.randomize_va_space" kernel parameter can be queried by running the following commands:
 
 $ sysctl kernel.randomize_va_space
 $ grep kernel.randomize_va_space /etc/sysctl.conf
 
-The output of the command should indicate a value of at least "1" (preferably "2"). If this value is not the default value, investigate how it could have been adjusted at runtime, and verify it is not set improperly in "/etc/sysctl.conf". 
+The output of the command should indicate a value of at least "1" (preferably "2"). If this value is not the default value, investigate how it could have been adjusted at runtime, and verify it is not set improperly in "/etc/sysctl.conf".
 If the correct value is not returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38596
+  describe kernel_parameter('kernel.randomize_va_space') do
+    its('value') { should eq 2 }
+  end
+# END_DESCRIBE V-38596
+
 end

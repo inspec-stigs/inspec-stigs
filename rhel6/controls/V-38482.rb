@@ -23,17 +23,18 @@ Requiring digits makes password guessing attacks more difficult by ensuring a la
 The pam_cracklib module\'s "dcredit" parameter controls requirements for usage of digits in a password. When set to a negative number, any password will be required to contain that many digits. When set to a positive number, pam_cracklib will grant +1 additional length credit for each digit. Add "dcredit=-1" after pam_cracklib.so to require use of a digit in passwords.
 '
   tag checktext: '
-To check how many digits are required in a password, run the following command: 
+To check how many digits are required in a password, run the following command:
 
 $ grep pam_cracklib /etc/pam.d/system-auth
 
-The "dcredit" parameter (as a negative number) will indicate how many digits are required. The DoD requires at least one digit in a password. This would appear as "dcredit=-1". 
+The "dcredit" parameter (as a negative number) will indicate how many digits are required. The DoD requires at least one digit in a password. This would appear as "dcredit=-1".
 If dcredit is not found or not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38482
+  describe file('/etc/pam.d/system-auth') do
+    its('content') { should match /pam_cracklib.so.*?dcredit=-\d+/ }
+  end
+# END_DESCRIBE V-38482
+
 end

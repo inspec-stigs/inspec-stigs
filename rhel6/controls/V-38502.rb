@@ -20,22 +20,23 @@ The "/etc/shadow" file contains the list of local system accounts and stores pas
   tag version: 'RHEL-06-000033'
   tag ruleid: 'SV-50303r1_rule'
   tag fixtext: '
-To properly set the owner of "/etc/shadow", run the command: 
+To properly set the owner of "/etc/shadow", run the command:
 
 # chown root /etc/shadow
 '
   tag checktext: '
-To check the ownership of "/etc/shadow", run the command: 
+To check the ownership of "/etc/shadow", run the command:
 
 $ ls -l /etc/shadow
 
-If properly configured, the output should indicate the following owner: "root" 
+If properly configured, the output should indicate the following owner: "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38502
+  describe file('/etc/shadow') do
+    its('owner') { should eq 'root' }
+  end
+# END_DESCRIBE V-38502
+
 end

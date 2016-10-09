@@ -20,12 +20,12 @@ Arbitrary changes to the system time can be used to obfuscate nefarious activiti
   tag version: 'RHEL-06-000169'
   tag ruleid: 'SV-50326r4_rule'
   tag fixtext: '
-On a 32-bit system, add the following to "/etc/audit/audit.rules": 
+On a 32-bit system, add the following to "/etc/audit/audit.rules":
 
 # audit_time_rules
 -a always,exit -F arch=b32 -S stime -k audit_time_rules
 
-On a 64-bit system, the "-S stime" is not necessary. The -k option allows for the specification of a key in string form that can be used for better reporting capability through ausearch and aureport. Multiple system calls can be defined on the same line to save space if desired, but is not required. See an example of multiple combined syscalls: 
+On a 64-bit system, the "-S stime" is not necessary. The -k option allows for the specification of a key in string form that can be used for better reporting capability through ausearch and aureport. Multiple system calls can be defined on the same line to save space if desired, but is not required. See an example of multiple combined syscalls:
 
 -a always,exit -F arch=b64 -S adjtimex -S settimeofday -S clock_settime -k audit_time_rules
 '
@@ -36,14 +36,16 @@ To determine if the system is configured to audit calls to the "stime" system ca
 
 $ sudo grep -w "stime" /etc/audit/audit.rules
 
-If the system is configured to audit this activity, it will return a line. 
+If the system is configured to audit this activity, it will return a line.
 
-If the system is not configured to audit time changes, this is a finding. 
+If the system is not configured to audit time changes, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38525
+only_if { os[:arch] == "x86_32" }
+  describe auditd_rules.syscall('stime').action do
+    it { should eq(['always']) }
+  end
+# END_DESCRIBE V-38525
+
 end

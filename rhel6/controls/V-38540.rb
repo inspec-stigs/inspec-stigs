@@ -20,7 +20,7 @@ The network environment should not be modified by anything other than administra
   tag version: 'RHEL-06-000182'
   tag ruleid: 'SV-50341r2_rule'
   tag fixtext: '
-Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system: 
+Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system:
 
 # audit_network_modifications
 -a always,exit -F arch=ARCH -S sethostname -S setdomainname -k audit_network_modifications
@@ -30,17 +30,26 @@ Add the following to "/etc/audit/audit.rules", setting ARCH to either b32 or b64
 -w /etc/sysconfig/network -p wa -k audit_network_modifications
 '
   tag checktext: '
-To determine if the system is configured to audit changes to its network configuration, run the following command: 
+To determine if the system is configured to audit changes to its network configuration, run the following command:
 
 auditctl -l | egrep \'(sethostname|setdomainname|/etc/issue|/etc/issue.net|/etc/hosts|/etc/sysconfig/network)\'
 
-If the system is configured to watch for network configuration changes, a line should be returned for each file specified (and "perm=wa" should be indicated for each). 
+If the system is configured to watch for network configuration changes, a line should be returned for each file specified (and "perm=wa" should be indicated for each).
 If the system is not configured to audit changes of the network configuration, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38540
+  describe auditd_rules.syscall('sethostname').action do
+    it { should eq(['always']) }
+  end
+  describe auditd_rules.syscall('setdomainname').action do
+    it { should eq(['always']) }
+  end
+  ['/etc/issue','/etc/issue.net','/etc/hosts','/etc/sysconfig/network'].each do |file|
+    describe auditd_rules do
+      its('lines') { should include("-w #{file} -p wa -k audit_network_modifications") }
+    end
+  end
+# END_DESCRIBE V-38540
+
 end

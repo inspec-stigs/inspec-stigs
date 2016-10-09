@@ -20,22 +20,24 @@ Passwords with excessive repeating characters may be more vulnerable to password
   tag version: 'RHEL-06-000299'
   tag ruleid: 'SV-50494r2_rule'
   tag fixtext: '
-The pam_cracklib module\'s "maxrepeat" parameter controls requirements for consecutive repeating characters. When set to a positive number, it will reject passwords which contain more than that number of consecutive characters. Add "maxrepeat=3" after pam_cracklib.so to prevent a run of (3 + 1) or more identical characters. 
+The pam_cracklib module\'s "maxrepeat" parameter controls requirements for consecutive repeating characters. When set to a positive number, it will reject passwords which contain more than that number of consecutive characters. Add "maxrepeat=3" after pam_cracklib.so to prevent a run of (3 + 1) or more identical characters.
 
-password required pam_cracklib.so maxrepeat=3 
+password required pam_cracklib.so maxrepeat=3
 '
   tag checktext: '
-To check the maximum value for consecutive repeating characters, run the following command: 
+To check the maximum value for consecutive repeating characters, run the following command:
 
 $ grep pam_cracklib /etc/pam.d/system-auth
 
-Look for the value of the "maxrepeat" parameter. The DoD requirement is 3. 
+Look for the value of the "maxrepeat" parameter. The DoD requirement is 3.
 If maxrepeat is not found or not set to the required value, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38693
+  tag 'pam','system-auth','maxrepeat'
+  describe file('/etc/pam.d/system-auth') do
+    its('content') { should match /pam_cracklib.*?maxrepeat=3/ }
+  end
+# END_DESCRIBE V-38693
+
 end

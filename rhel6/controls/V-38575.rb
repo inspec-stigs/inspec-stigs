@@ -20,7 +20,7 @@ Auditing file deletions will create an audit trail for files that are removed fr
   tag version: 'RHEL-06-000200'
   tag ruleid: 'SV-50376r4_rule'
   tag fixtext: '
-At a minimum, the audit system should collect file deletion events for all users and root. Add the following (or equivalent) to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system: 
+At a minimum, the audit system should collect file deletion events for all users and root. Add the following (or equivalent) to "/etc/audit/audit.rules", setting ARCH to either b32 or b64 as appropriate for your system:
 
 -a always,exit -F arch=ARCH -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=500 -F auid!=4294967295 -k delete
 -a always,exit -F arch=ARCH -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete
@@ -50,12 +50,15 @@ $ sudo grep -w "renameat" /etc/audit/audit.rules
 
 If the system is configured to audit this activity, it will return a line.
 
-If no line is returned, this is a finding. 
+If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38575
+  ['rmdir','unlink','unlinkat','rename','renameat'].each do |syscall|
+    describe auditd_rules.syscall(syscall).action do
+      it { should eq(['always']) }
+    end
+  end
+# END_DESCRIBE V-38575
+
 end

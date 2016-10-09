@@ -13,7 +13,7 @@ control 'V-38467' do
   desc '
 Placing "/var/log/audit" in its own partition enables better separation between audit files and other files, and helps ensure that auditing cannot be halted due to the partition running out of space.
 '
-  tag 'stig','V-38467'
+  tag 'stig','V-38467','audit','mount'
   tag severity: 'low'
   tag checkid: 'C-46022r1_chk'
   tag fixid: 'F-43412r1_fix'
@@ -23,17 +23,18 @@ Placing "/var/log/audit" in its own partition enables better separation between 
 Audit logs are stored in the "/var/log/audit" directory. Ensure that it has its own partition or logical volume at installation time, or migrate it later using LVM. Make absolutely certain that it is large enough to store all audit logs that will be created by the auditing daemon.
 '
   tag checktext: '
-Run the following command to determine if "/var/log/audit" is on its own partition or logical volume: 
+Run the following command to determine if "/var/log/audit" is on its own partition or logical volume:
 
 $ mount | grep "on /var/log/audit "
 
-If "/var/log/audit" has its own partition or volume group, a line will be returned. 
+If "/var/log/audit" has its own partition or volume group, a line will be returned.
 If no line is returned, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38467
+  describe mount('/var/log/audit') do
+    it { should be_mounted }
+  end
+# END_DESCRIBE V-38467
+
 end

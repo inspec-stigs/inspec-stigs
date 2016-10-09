@@ -20,22 +20,23 @@ Only root should be able to modify important boot parameters.
   tag version: 'RHEL-06-000065'
   tag ruleid: 'SV-50380r1_rule'
   tag fixtext: '
-The file "/etc/grub.conf" should be owned by the "root" user to prevent destruction or modification of the file. To properly set the owner of "/etc/grub.conf", run the command: 
+The file "/etc/grub.conf" should be owned by the "root" user to prevent destruction or modification of the file. To properly set the owner of "/etc/grub.conf", run the command:
 
 # chown root /etc/grub.conf
 '
   tag checktext: '
-To check the ownership of "/etc/grub.conf", run the command: 
+To check the ownership of "/etc/grub.conf", run the command:
 
 $ ls -lL /etc/grub.conf
 
-If properly configured, the output should indicate the following owner: "root" 
+If properly configured, the output should indicate the following owner: "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38579
+  describe file('/etc/grub.conf') do
+    its('owner') { should eq 'root' }
+  end
+# END_DESCRIBE V-38579
+
 end

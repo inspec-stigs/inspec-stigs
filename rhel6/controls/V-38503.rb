@@ -20,22 +20,23 @@ The "/etc/shadow" file stores password hashes. Protection of this file is critic
   tag version: 'RHEL-06-000034'
   tag ruleid: 'SV-50304r1_rule'
   tag fixtext: '
-To properly set the group owner of "/etc/shadow", run the command: 
+To properly set the group owner of "/etc/shadow", run the command:
 
 # chgrp root /etc/shadow
 '
   tag checktext: '
-To check the group ownership of "/etc/shadow", run the command: 
+To check the group ownership of "/etc/shadow", run the command:
 
 $ ls -l /etc/shadow
 
-If properly configured, the output should indicate the following group-owner. "root" 
+If properly configured, the output should indicate the following group-owner. "root"
 If it does not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38503
+  describe file('/etc/shadow') do
+    its('group') { should eq 'root' }
+  end
+# END_DESCRIBE V-38503
+
 end

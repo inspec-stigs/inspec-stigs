@@ -11,9 +11,9 @@ control 'V-38476' do
   impact 1.0
   title 'Vendor-provided cryptographic certificates must be installed to verify the integrity of system software.'
   desc '
-The Red Hat GPG keys are necessary to cryptographically verify packages are from Red Hat. 
+The Red Hat GPG keys are necessary to cryptographically verify packages are from Red Hat.
 '
-  tag 'stig','V-38476'
+  tag 'stig','V-38476','rpm'
   tag severity: 'high'
   tag checkid: 'C-46031r3_chk'
   tag fixid: 'F-43421r3_fix'
@@ -41,9 +41,29 @@ gpg-pubkey-2fa658e0-45700c69
 If the Red Hat GPG Keys are not installed, this is a finding.
 '
 
-# START_CHECKS
+# START_DESCRIBE V-38476
+  if os[:family] == 'redhat'
+    if os[:name] == 'redhat'
+      if os[:release].match /^6/
+        # IF RHEL6
+        describe command('rpm -q gpg-pubkey') do
+          its('stdout') { should match "gpg-pubkey-fd431d51-4ae0493b" }
+          its('stdout') { should match "gpg-pubkey-2fa658e0-45700c69" }
+        end
+      end
+    elsif os[:name] == 'centos'
+      if os[:release].match /^6/
+        # IF CENTOS6
+        describe command('rpm -q gpg-pubkey') do
+          its('stdout') { should match "gpg-pubkey-c105b9de-4e0fd3a3" }
+          its('stdout') { should match "gpg-pubkey-fe837f6f-4e0fd77e" }
+        end
+      end
+    end
+  end
   # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+  #   it { should be_directory }
+  # end
+# END_DESCRIBE V-38476
+
 end

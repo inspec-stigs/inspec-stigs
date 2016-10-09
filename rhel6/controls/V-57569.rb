@@ -30,9 +30,11 @@ $ grep \'\s/tmp\' /etc/fstab
 The resulting output will show whether the /tmp partition has the "noexec" flag set. If the /tmp partition does not have the noexec flag set, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-57569
+  tag 'mount','/tmp','tmp','noexec'
+  describe mount('/tmp') do
+    its('options') { should match 'noexec' }
+  end
+# END_DESCRIBE V-57569
+
 end

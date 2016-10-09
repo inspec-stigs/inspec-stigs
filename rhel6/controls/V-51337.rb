@@ -20,15 +20,17 @@ Disabling a major host protection feature, such as SELinux, at boot time prevent
   tag version: 'RHEL-06-000017'
   tag ruleid: 'SV-65547r1_rule'
   tag fixtext: '
-SELinux can be disabled at boot time by an argument in "/etc/grub.conf". Remove any instances of "selinux=0" from the kernel arguments in that file to prevent SELinux from being disabled at boot. 
+SELinux can be disabled at boot time by an argument in "/etc/grub.conf". Remove any instances of "selinux=0" from the kernel arguments in that file to prevent SELinux from being disabled at boot.
 '
   tag checktext: '
 Inspect "/etc/grub.conf" for any instances of "selinux=0" in the kernel boot arguments. Presence of "selinux=0" indicates that SELinux is disabled at boot time. If SELinux is disabled at boot time, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-51337
+  tag 'grub','selinux'
+  describe file('/etc/grub.conf') do
+    its('content') { should_not match /selinux=0/ }
+  end
+# END_DESCRIBE V-51337
+
 end

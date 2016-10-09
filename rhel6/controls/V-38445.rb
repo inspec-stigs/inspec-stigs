@@ -13,29 +13,36 @@ control 'V-38445' do
   desc '
 If non-privileged users can write to audit logs, audit trails can be modified or destroyed.
 '
-  tag 'stig','V-38445'
+  tag 'stig','V-38445', 'audit'
   tag severity: 'medium'
   tag checkid: 'C-46000r1_chk'
   tag fixid: 'F-43390r1_fix'
   tag version: 'RHEL-06-000522'
   tag ruleid: 'SV-50245r2_rule'
   tag fixtext: '
-Change the group owner of the audit log files with the following command: 
+Change the group owner of the audit log files with the following command:
 
 # chgrp root [audit_file]
 '
   tag checktext: '
-Run the following command to check the group owner of the system audit logs: 
+Run the following command to check the group owner of the system audit logs:
 
 grep "^log_file" /etc/audit/auditd.conf|sed s/^[^\/]*//|xargs stat -c %G:%n
 
-Audit logs must be group-owned by root. 
+Audit logs must be group-owned by root.
 If they are not, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38445
+  describe auditd_conf do
+    its('log_file') { should eq '/var/log/audit/audit.log' }
+  end
+  describe file('/var/log/audit') do
+    its('group') { should eq 'root' }
+  end
+  describe file('/var/log/audit/audit.log') do
+    its('group') { should eq 'root' }
+  end
+# END_DESCRIBE V-38445
+
 end

@@ -20,12 +20,12 @@ Permissions on audit binaries and configuration files that are too generous coul
   tag version: 'RHEL-06-000278'
   tag ruleid: 'SV-50464r1_rule'
   tag fixtext: '
-The RPM package management system can restore file access permissions of the audit package files and directories. The following command will update audit files with permissions different from what is expected by the RPM database: 
+The RPM package management system can restore file access permissions of the audit package files and directories. The following command will update audit files with permissions different from what is expected by the RPM database:
 
 # rpm --setperms audit
 '
   tag checktext: '
-The following command will list which audit files on the system have permissions different from what is expected by the RPM database: 
+The following command will list which audit files on the system have permissions different from what is expected by the RPM database:
 
 # rpm -V audit | grep \'^.M\'
 
@@ -37,9 +37,11 @@ If there is any output, for each file or directory found, compare the RPM-expect
 If the existing permissions are more permissive than those expected by RPM, this is a finding.
 '
 
-# START_CHECKS
-  # describe file('/etc') do
-  #  it { should be_directory }
-  #end
-# END_CHECKS
+# START_DESCRIBE V-38663
+  tag 'rpm','permissions'
+  describe command("rpm -V audit | grep '^.M'") do
+    its('stdout') { should eq "" }
+  end
+# END_DESCRIBE V-38663
+
 end

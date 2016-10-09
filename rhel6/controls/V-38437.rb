@@ -13,7 +13,7 @@ control 'V-38437' do
   desc '
 All filesystems that are required for the successful operation of the system should be explicitly listed in "/etc/fstab" by an administrator. New filesystems should not be arbitrarily introduced via the automounter.
 
-The "autofs" daemon mounts and unmounts filesystems, such as user home directories shared via NFS, on demand. In addition, autofs can be used to handle removable media, and the default configuration provides the cdrom device as "/misc/cd". However, this method of providing access to removable media is not common, so autofs can almost always be disabled if NFS is not in use. Even if NFS is required, it is almost always possible to configure filesystem mounts statically by editing "/etc/fstab" rather than relying on the automounter.
+The "autofs" daemon mounts and unmounts filesystems, such as user home directories shared via NFS, on demand. In addition, autofs can be used to handle removable media, and the default configuration provides the cdrom device as "/misc/cd". However, this method of providing access to removable media is not common, so autofs can almost always be disabled if NFS is not in use. Even if NFS is required, it is almost always possible to configure filesystem mounts statically by editing "/etc/fstab" rather than relying on the automounter. 
 '
   tag 'stig','V-38437'
   tag severity: 'low'
@@ -22,20 +22,20 @@ The "autofs" daemon mounts and unmounts filesystems, such as user home directori
   tag version: 'RHEL-06-000526'
   tag ruleid: 'SV-50237r1_rule'
   tag fixtext: '
-If the "autofs" service is not needed to dynamically mount NFS filesystems or removable media, disable the service for all runlevels:
+If the "autofs" service is not needed to dynamically mount NFS filesystems or removable media, disable the service for all runlevels: 
 
 # chkconfig --level 0123456 autofs off
 
-Stop the service if it is already running:
+Stop the service if it is already running: 
 
 # service autofs stop
 '
   tag checktext: '
-To verify the "autofs" service is disabled, run the following command:
+To verify the "autofs" service is disabled, run the following command: 
 
 chkconfig --list autofs
 
-If properly configured, the output should be the following:
+If properly configured, the output should be the following: 
 
 autofs 0:off 1:off 2:off 3:off 4:off 5:off 6:off
 
@@ -46,10 +46,11 @@ Verify the "autofs" service is not running:
 If the autofs service is enabled or running, this is a finding.
 '
 
-# START_CHECKS
+# START_DESCRIBE V-38437
   describe service('autofs') do
     it { should_not be_enabled }
     it { should_not be_running }
   end
-# END_CHECKS
+# END_DESCRIBE V-38437
+
 end
