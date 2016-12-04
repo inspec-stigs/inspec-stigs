@@ -8,7 +8,7 @@ title 'RHEL-07-040421 - The system must not send Internet Protocol version 4 (IP
 control 'RHEL-07-040421' do
   impact 0.5
   title 'The system must not send Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects.'
-  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the systems route table, possibly revealing portions of the network topology.'
+  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the system\'s route table, possibly revealing portions of the network topology.'
   tag 'stig', 'RHEL-07-040421'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-040421_chk'

@@ -8,7 +8,7 @@ title 'RHEL-07-040420 - The system must not allow interfaces to perform Internet
 control 'RHEL-07-040420' do
   impact 0.5
   title 'The system must not allow interfaces to perform Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirects by default.'
-  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the systems route table, possibly revealing portions of the network topology.'
+  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages contain information from the system\'s route table, possibly revealing portions of the network topology.'
   tag 'stig', 'RHEL-07-040420'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-040420_chk'
@@ -24,7 +24,7 @@ net.ipv4.conf.default.send_redirects=0'
 
 Check the value of the "default send_redirects" variables with the following command:
 
-# /sbin/sysctl -a | grep  net.ipv4.conf.default.send_redirects
+# /sbin/sysctl -a | grep  \'net.ipv4.conf.default.send_redirects\'
 net.ipv4.conf.default.send_redirects=0
 
 If the returned line does not have a value of “0”, a line is not returned, or the retuned line is commented out, this is a finding.'

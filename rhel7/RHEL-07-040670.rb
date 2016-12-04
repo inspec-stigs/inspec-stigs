@@ -8,7 +8,7 @@ title 'RHEL-07-040670 - The SSH daemon must not permit Kerberos authentication u
 control 'RHEL-07-040670' do
   impact 0.5
   title 'The SSH daemon must not permit Kerberos authentication unless needed.'
-  desc 'Kerberos authentication for SSH is often implemented using Generic Security Service Application Program Interface (GSSAPI). If Kerberos is enabled through SSH, the SSH daemon provides a means of access to the systems Kerberos implementation. Vulnerabilities in the systems Kerberos implementation may then be subject to exploitation. To reduce the attack surface of the system, the Kerberos authentication mechanism within SSH must be disabled for systems not using this capability.'
+  desc 'Kerberos authentication for SSH is often implemented using Generic Security Service Application Program Interface (GSSAPI). If Kerberos is enabled through SSH, the SSH daemon provides a means of access to the system\'s Kerberos implementation. Vulnerabilities in the system\'s Kerberos implementation may then be subject to exploitation. To reduce the attack surface of the system, the Kerberos authentication mechanism within SSH must be disabled for systems not using this capability.'
   tag 'stig', 'RHEL-07-040670'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-040670_chk'

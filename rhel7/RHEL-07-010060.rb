@@ -15,7 +15,7 @@ control 'RHEL-07-010060' do
   tag fixid: 'F-RHEL-07-010060_fix'
   tag version: 'RHEL-07-010060'
   tag ruleid: 'RHEL-07-010060_rule'
-  tag fixtext: 'Configure the operating system to enable a users session lock until that user re-establishes access using established identification and authentication procedures.
+  tag fixtext: 'Configure the operating system to enable a user\'s session lock until that user re-establishes access using established identification and authentication procedures.
 
 Create a database to contain the system-wide screensaver settings (if it does not already exist) with the following command:
 
@@ -27,7 +27,7 @@ Add the setting to enable screensaver locking to the file:
 lock-enabled=true
 
 After the setting has been set, run dconf update.'
-  tag checktext: 'Verify the operating system enables a users session lock until that user re-establishes access using established identification and authentication procedures. The screen program must be installed to lock sessions on the console.
+  tag checktext: 'Verify the operating system enables a user\'s session lock until that user re-establishes access using established identification and authentication procedures. The screen program must be installed to lock sessions on the console.
 
 Note: If the system does not have GNOME installed, this requirement is Not Applicable.
 

@@ -22,7 +22,7 @@ Add the following line in "/etc/ssh/sshd_config", or uncomment the line and set 
 RhostsRSAAuthentication yes'
   tag checktext: 'Verify the SSH daemon does not allow authentication using RSA rhosts authentication.
 
-To determine how the SSH daemons "RhostsRSAAuthentication" option is set, run the following command:
+To determine how the SSH daemon\'s "RhostsRSAAuthentication" option is set, run the following command:
 
 # grep -i IgnoreUserKnownHosts /etc/ssh/sshd_config
 

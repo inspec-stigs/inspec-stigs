@@ -8,7 +8,7 @@ title 'RHEL-07-010210 - Passwords must be restricted to a 24 hours/1 day minimum
 control 'RHEL-07-010210' do
   impact 0.5
   title 'Passwords must be restricted to a 24 hours/1 day minimum lifetime.'
-  desc 'Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, the password could be repeatedly changed in a short period of time to defeat the organizations policy regarding password reuse.'
+  desc 'Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, the password could be repeatedly changed in a short period of time to defeat the organization\'s policy regarding password reuse.'
   tag 'stig', 'RHEL-07-010210'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-010210_chk'
@@ -20,7 +20,7 @@ control 'RHEL-07-010210' do
 # chage -m 1 [user]'
   tag checktext: 'Check whether the minimum time period between password changes for each user account is one day or greater.
 
-# awk -F: $4 < 1 {print $1} /etc/shadow
+# awk -F: \'$4 < 1 {print $1}\' /etc/shadow
 
 If any results are returned that are not associated with a system account, this is a finding.'
 

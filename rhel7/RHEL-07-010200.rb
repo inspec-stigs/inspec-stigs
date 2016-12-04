@@ -8,7 +8,7 @@ title 'RHEL-07-010200 - Passwords for new users must be restricted to a 24 hours
 control 'RHEL-07-010200' do
   impact 0.5
   title 'Passwords for new users must be restricted to a 24 hours/1 day minimum lifetime.'
-  desc 'Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, the password could be repeatedly changed in a short period of time to defeat the organizations policy regarding password reuse.'
+  desc 'Enforcing a minimum password lifetime helps to prevent repeated password changes to defeat the password reuse or history enforcement requirement. If users are allowed to immediately and continually change their password, the password could be repeatedly changed in a short period of time to defeat the organization\'s policy regarding password reuse.'
   tag 'stig', 'RHEL-07-010200'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-010200_chk'

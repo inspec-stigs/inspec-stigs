@@ -30,7 +30,7 @@ Note: SSH public key files may be found in other directories on the system depen
 
 The following command will find all SSH public key files on the system:
 
-# find / -name *.pub
+# find / -name \'*.pub\'
 
 Check the mode of the public host key files under /etc/ssh file with the following command:
 

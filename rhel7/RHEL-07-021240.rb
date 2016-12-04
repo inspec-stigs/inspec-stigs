@@ -35,7 +35,7 @@ Note: The partition of /home is used in the example.
 # grep /home /etc/fstab
 UUID=333ada18    /home                   ext4    noatime,nobarrier,nodev  1 2
 
-If a separate entry for the file system/partition that contains the non-privileged interactive users home directories does not exist, or the file system/partition for the non-privileged interactive users is not /home, this is a finding.'
+If a separate entry for the file system/partition that contains the non-privileged interactive users\' home directories does not exist, or the file system/partition for the non-privileged interactive users is not /home, this is a finding.'
 
 # START_DESCRIBE RHEL-07-021240
   describe file('') do

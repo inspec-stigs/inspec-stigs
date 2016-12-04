@@ -22,7 +22,7 @@ StrictModes yes'
 
 The location of the sshd_config file may vary on the system and can be found using the following command:
 
-# find / -name sshd*_config 
+# find / -name \'sshd*_config\' 
 
 If there is more than one ssh server daemon configuration file on the system, determine which daemons are active on the system with the following command:
 

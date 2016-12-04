@@ -32,7 +32,7 @@ Check the cryptographic hash of system files and commands with the following com
 
 Note: System configuration files (indicated by a "c" in the second column) are expected to change over time. Unusual modifications should be investigated through the system audit log.
 
-# rpm -Va | grep ^..5
+# rpm -Va | grep \'^..5\'
 
 If there is any output from the command for system binaries, this is a finding.'
 

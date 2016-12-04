@@ -8,7 +8,7 @@ title 'RHEL-07-010074 - The operating system must initiate a session lock for gr
 control 'RHEL-07-010074' do
   impact 0.5
   title 'The operating system must initiate a session lock for graphical user interfaces when the screensaver is activated.'
-  desc 'A session time-out lock is a temporary action taken when a user stops work and moves away from the immediate physical vicinity of the information system but does not log out because of the temporary nature of the absence. Rather than relying on the user to manually lock their operating system session prior to vacating the vicinity, operating systems need to be able to identify when a users session has idled and take action to initiate the session lock.  The session lock is implemented at the point where session activity can be determined and/or controlled.'
+  desc 'A session time-out lock is a temporary action taken when a user stops work and moves away from the immediate physical vicinity of the information system but does not log out because of the temporary nature of the absence. Rather than relying on the user to manually lock their operating system session prior to vacating the vicinity, operating systems need to be able to identify when a user\'s session has idled and take action to initiate the session lock.  The session lock is implemented at the point where session activity can be determined and/or controlled.'
   tag 'stig', 'RHEL-07-010074'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-010074_chk'

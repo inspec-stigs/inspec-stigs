@@ -8,7 +8,7 @@ title 'RHEL-07-010072 - The operating system must have the screen package instal
 control 'RHEL-07-010072' do
   impact 0.5
   title 'The operating system must have the screen package installed.'
-  desc 'A session time-out lock is a temporary action taken when a user stops work and moves away from the immediate physical vicinity of the information system but does not log out because of the temporary nature of the absence. Rather than relying on the user to manually lock their operating system session prior to vacating the vicinity, operating systems need to be able to identify when a users session has idled and take action to initiate the session lock.  The screen package allows for a session lock to be implemented and configured.'
+  desc 'A session time-out lock is a temporary action taken when a user stops work and moves away from the immediate physical vicinity of the information system but does not log out because of the temporary nature of the absence. Rather than relying on the user to manually lock their operating system session prior to vacating the vicinity, operating systems need to be able to identify when a user\'s session has idled and take action to initiate the session lock.  The screen package allows for a session lock to be implemented and configured.'
   tag 'stig', 'RHEL-07-010072'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-010072_chk'

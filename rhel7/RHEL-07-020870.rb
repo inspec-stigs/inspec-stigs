@@ -18,7 +18,7 @@ control 'RHEL-07-020870' do
   tag fixtext: 'Edit the local interactive user initialization files to change any PATH variable statements that reference directories other than their home directory. If a local interactive user requires path variables to reference a directory owned by the application, it must be documented with the ISSO.'
   tag checktext: 'Verify that all local interactive user initialization files path statements do not contain statements that will reference a working directory other than the users’ home directory.
 
-Check the path statement for all local interactive user initialization files in the users home directory with the following commands:
+Check the path statement for all local interactive user initialization files in the users\' home directory with the following commands:
 
 Note: The example will be for the smithj user, which has a home directory of “/home/smithj”.
 

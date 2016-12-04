@@ -8,7 +8,7 @@ title 'RHEL-07-020850 - Local initialization files for local interactive users m
 control 'RHEL-07-020850' do
   impact 0.5
   title 'Local initialization files for local interactive users must be group-owned by the users primary group or root.'
-  desc 'Local initialization files for interactive users are used to configure the users shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
+  desc 'Local initialization files for interactive users are used to configure the user\'s shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
   tag 'stig', 'RHEL-07-020850'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-020850_chk'

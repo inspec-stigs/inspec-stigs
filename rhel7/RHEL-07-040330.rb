@@ -22,7 +22,7 @@ control 'RHEL-07-040330' do
 
 Check the system for the existence of these files with the following command:
 
-# find / -name *.shosts’
+# find / -name \'*.shosts’
 
 If any .shosts files are found on the system, this is a finding.'
 

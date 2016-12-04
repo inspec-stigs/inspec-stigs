@@ -15,7 +15,7 @@ control 'RHEL-07-040100' do
   tag fixid: 'F-RHEL-07-040100_fix'
   tag version: 'RHEL-07-040100'
   tag ruleid: 'RHEL-07-040100_rule'
-  tag fixtext: 'Update the hosts firewall settings and/or running services to comply with the PPSM CLSA for the site or program and the PPSM CAL.'
+  tag fixtext: 'Update the host\'s firewall settings and/or running services to comply with the PPSM CLSA for the site or program and the PPSM CAL.'
   tag checktext: 'Inspect the firewall configuration and running services to verify that it is configured to prohibit or restrict the use of functions, ports, protocols, and/or services that are unnecessary or prohibited.
 
 Check which services are currently active with the following command:

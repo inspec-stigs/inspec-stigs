@@ -40,7 +40,7 @@ Look for the following entry:
 
 If rsyslog is not logging messages for the cron facility or all facilities, this is a finding.  
 
-If the entry is in the “/etc/rsyslog.conf” file but is after the entry: *.*, this is a finding.'
+If the entry is in the “/etc/rsyslog.conf” file but is after the entry: *.*\', this is a finding.'
 
 # START_DESCRIBE RHEL-07-021160
   describe file('') do

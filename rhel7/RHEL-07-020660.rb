@@ -8,7 +8,7 @@ title 'RHEL-07-020660 - All local interactive user home directories must be owne
 control 'RHEL-07-020660' do
   impact 0.5
   title 'All local interactive user home directories must be owned by their respective users.'
-  desc 'If a local interactive user does not own their home directory, unauthorized users could access or modify the users files, and the users may not be able to access their own files.'
+  desc 'If a local interactive user does not own their home directory, unauthorized users could access or modify the user\'s files, and the users may not be able to access their own files.'
   tag 'stig', 'RHEL-07-020660'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-020660_chk'

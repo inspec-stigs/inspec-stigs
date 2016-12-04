@@ -20,7 +20,7 @@ control 'RHEL-07-010270' do
 PermitEmptyPasswords no
 
 Any accounts with empty passwords should be disabled immediately, and PAM configuration should prevent users from being able to assign themselves empty passwords.'
-  tag checktext: 'To determine how the SSH daemons "PermitEmptyPasswords" option is set, run the following command:
+  tag checktext: 'To determine how the SSH daemon\'s "PermitEmptyPasswords" option is set, run the following command:
 
 # grep -i PermitEmptyPasswords /etc/ssh/sshd_config
 

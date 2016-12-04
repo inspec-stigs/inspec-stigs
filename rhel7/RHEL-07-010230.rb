@@ -20,7 +20,7 @@ control 'RHEL-07-010230' do
 # chage -M 60 [user]'
   tag checktext: 'Check whether the maximum time period for existing passwords is restricted to 60 days.
 
-# awk -F: $5 > 60 {print $1} /etc/shadow
+# awk -F: \'$5 > 60 {print $1}\' /etc/shadow
 
 If any results are returned that are not associated with a system account, this is a finding.'
 

@@ -21,10 +21,10 @@ control 'RHEL-07-020620' do
 Check for missing local interactive user home directories with the following command:
 
 # pwck -r
-user lp: directory /var/spool/lpd does not exist
-user news: directory /var/spool/news does not exist
-user uucp: directory /var/spool/uucp does not exist
-user smithj: directory /home/smithj does not exist
+user \'lp\': directory \'/var/spool/lpd\' does not exist
+user \'news\': directory \'/var/spool/news\' does not exist
+user \'uucp\': directory \'/var/spool/uucp\' does not exist
+user \'smithj\': directory \'/home/smithj\' does not exist
 
 Ask the System Administrator (SA) if any users found without home directories are local interactive users. If the SA is unable to provide a response, check for users with a User Identifier (UID) of 1000 or greater with the following command:
 

@@ -8,7 +8,7 @@ title 'RHEL-07-020860 - All local initialization files must have mode 0740 or le
 control 'RHEL-07-020860' do
   impact 0.5
   title 'All local initialization files must have mode 0740 or less permissive.'
-  desc 'Local initialization files are used to configure the users shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
+  desc 'Local initialization files are used to configure the user\'s shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
   tag 'stig', 'RHEL-07-020860'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-020860_chk'

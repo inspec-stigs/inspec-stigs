@@ -35,7 +35,7 @@ Note: This may miss interactive users that have been assigned a privileged UID. 
 Check that all referenced home directories exist with the following command:
 
 # pwck -r
-user smithj: directory /home/smithj does not exist
+user \'smithj\': directory \'/home/smithj\' does not exist
 
 If any home directories referenced in “/etc/passwd” are returned as not defined, this is a finding.'
 

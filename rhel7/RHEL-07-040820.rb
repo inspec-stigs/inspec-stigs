@@ -4,10 +4,10 @@
 # date: 2016-01-14
 # description: This Security Technical Implementation Guide is published as a tool to improve the security of Department of Defense (DoD) information systems. The requirements are derived from the National Institute of Standards and Technology (NIST) 800-53 and related documents. Comments or proposed revisions to this document should be sent via email to the following address: disa.stig_spt@mail.mil.
 # impacts
-title 'RHEL-07-040820 - The system's access control program must be configured to grant or deny system access to specific hosts and services.'
+title 'RHEL-07-040820 - The system\'s access control program must be configured to grant or deny system access to specific hosts and services.'
 control 'RHEL-07-040820' do
   impact 0.5
-  title 'The system's access control program must be configured to grant or deny system access to specific hosts and services.'
+  title 'The system\'s access control program must be configured to grant or deny system access to specific hosts and services.'
   desc 'If the systems access control program is not configured with appropriate rules for allowing and denying access to system network resources, services may be accessible to unauthorized hosts.'
   tag 'stig', 'RHEL-07-040820'
   tag severity: 'medium'
@@ -15,12 +15,12 @@ control 'RHEL-07-040820' do
   tag fixid: 'F-RHEL-07-040820_fix'
   tag version: 'RHEL-07-040820'
   tag ruleid: 'RHEL-07-040820_rule'
-  tag fixtext: 'If “firewalld” is installed and active on the system, configure rules for allowing specific services and hosts. 
+  tag fixtext: 'If “firewalld” is installed and active on the system, configure rules for allowing specific services and hosts.
 
 If “tcpwrappers” is installed. configure the “/etc/hosts.allow” and “/etc/hosts.deny” to allow or deny access to specific hosts.'
-  tag checktext: 'If the “firewalld” package is not installed, ask the System Administrator if another firewall application (such as iptables) is installed. If an application firewall is not installed, this is a finding. 
+  tag checktext: 'If the “firewalld” package is not installed, ask the System Administrator if another firewall application (such as iptables) is installed. If an application firewall is not installed, this is a finding.
 
-Verify the systems access control program is configured to grant or deny system access to specific hosts.
+Verify the system\'s access control program is configured to grant or deny system access to specific hosts.
 
 Check to see if “firewalld” is active with the following command:
 
@@ -51,7 +51,7 @@ If “firewalld” is not active, determine whether “tcpwrappers” is being u
 
 # ls -al /etc/hosts.allow
 rw-r----- 1 root root 9 Aug  2 23:13 /etc/hosts.allow
- 
+
 # ls -al /etc/hosts.deny
 -rw-r----- 1 root root  9 Apr  9  2007 /etc/hosts.deny
 

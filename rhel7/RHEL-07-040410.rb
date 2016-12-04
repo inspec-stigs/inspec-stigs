@@ -8,7 +8,7 @@ title 'RHEL-07-040410 - The system must ignore to Internet Protocol version 4 (I
 control 'RHEL-07-040410' do
   impact 0.5
   title 'The system must ignore to Internet Protocol version 4 (IPv4) Internet Control Message Protocol (ICMP) redirect messages.'
-  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages modify the hosts route table and are unauthenticated. An illicit ICMP redirect message could result in a man-in-the-middle attack.'
+  desc 'ICMP redirect messages are used by routers to inform hosts that a more direct route exists for a particular destination. These messages modify the host\'s route table and are unauthenticated. An illicit ICMP redirect message could result in a man-in-the-middle attack.'
   tag 'stig', 'RHEL-07-040410'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-040410_chk'
@@ -23,7 +23,7 @@ net.ipv4.conf.default.accept_redirects = 0'
 
 Check the value of the “accept_redirects” variables with the following command:
 
-# /sbin/sysctl -a | grep  net.ipv4.conf.*.accept_redirects
+# /sbin/sysctl -a | grep  \'net.ipv4.conf.*.accept_redirects\'
 net.ipv4.conf.default.accept_redirects=0
 net.ipv4.conf.all.accept_redirects=0
 

@@ -22,7 +22,7 @@ control 'RHEL-07-040650' do
 
 The following command will find all SSH private key files on the system:
 
-# find / -name *ssh_host*key
+# find / -name \'*ssh_host*key\'
 
 Check the mode of the private host key files under /etc/ssh file with the following command:
 

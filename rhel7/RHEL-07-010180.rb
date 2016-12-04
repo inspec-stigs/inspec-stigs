@@ -20,7 +20,7 @@ control 'RHEL-07-010180' do
 Add or update the following line in /etc/login.defs:
 
 ENCRYPT_METHOD SHA512'
-  tag checktext: 'Verify the systems shadow file is configured to store only encrypted representations of passwords. The strength of encryption that must be used to hash passwords for all accounts is SHA512.
+  tag checktext: 'Verify the system\'s shadow file is configured to store only encrypted representations of passwords. The strength of encryption that must be used to hash passwords for all accounts is SHA512.
 
 Check that the system is configured to create SHA512 hashed passwords with the following command:
 

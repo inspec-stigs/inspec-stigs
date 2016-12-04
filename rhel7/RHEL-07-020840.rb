@@ -8,7 +8,7 @@ title 'RHEL-07-020840 - All local initialization files for interactive users mus
 control 'RHEL-07-020840' do
   impact 0.5
   title 'All local initialization files for interactive users must be owned by the home directory user or root.'
-  desc 'Local initialization files are used to configure the users shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
+  desc 'Local initialization files are used to configure the user\'s shell environment upon logon. Malicious modification of these files could compromise accounts upon logon.'
   tag 'stig', 'RHEL-07-020840'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-020840_chk'

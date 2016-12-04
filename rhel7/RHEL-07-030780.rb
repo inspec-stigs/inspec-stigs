@@ -8,7 +8,7 @@ title 'RHEL-07-030780 - The rsyslog daemon must not accept log messages from oth
 control 'RHEL-07-030780' do
   impact 0.5
   title 'The rsyslog daemon must not accept log messages from other servers unless the server is being used for log aggregation.'
-  desc 'Unintentionally running a rsyslog server accepting remote messages puts the system at increased risk. Malicious rsyslog messages sent to the server could exploit vulnerabilities in the server software itself, could introduce misleading information in to the systems logs, or could fill the systems storage leading to a Denial of Service. If the system is intended to be a log aggregation server its use must be documented with the ISSO.'
+  desc 'Unintentionally running a rsyslog server accepting remote messages puts the system at increased risk. Malicious rsyslog messages sent to the server could exploit vulnerabilities in the server software itself, could introduce misleading information in to the system\'s logs, or could fill the system\'s storage leading to a Denial of Service. If the system is intended to be a log aggregation server its use must be documented with the ISSO.'
   tag 'stig', 'RHEL-07-030780'
   tag severity: 'medium'
   tag checkid: 'C-RHEL-07-030780_chk'

@@ -29,7 +29,7 @@ Reset the user and group ownership of files within a package with the following 
   tag checktext: 'Verify the file permissions, ownership, and group membership of system files and commands match the vendor values.
 Check the file permissions, ownership, and group membership of system files and commands with the following command:
 
-# rpm -Va | grep ^.M
+# rpm -Va | grep \'^.M\'
 
 If there is any output from the command, this is a finding.'
 

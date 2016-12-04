@@ -17,7 +17,7 @@ control 'RHEL-07-040261' do
   tag ruleid: 'RHEL-07-040261_rule'
   tag fixtext: 'Configure the SSH service to automatically start after reboot with the following command:
 
-# systemctl enable sshd ln -s /usr/lib/systemd/system/sshd.service /etc/systemd/system/multi-user.target.wants/sshd.service'
+# systemctl enable sshd ln -s \'/usr/lib/systemd/system/sshd.service\' \'/etc/systemd/system/multi-user.target.wants/sshd.service\''
   tag checktext: 'Verify SSH is loaded and active with the following command:
 
 # systemctl status sshd

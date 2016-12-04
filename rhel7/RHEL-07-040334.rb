@@ -22,7 +22,7 @@ Add the following line in "/etc/ssh/sshd_config", or uncomment the line and set 
 IgnoreRhosts yes'
   tag checktext: 'Verify the SSH daemon does not allow authentication using known hosts authentication.
 
-To determine how the SSH daemons "IgnoreRhosts" option is set, run the following command:
+To determine how the SSH daemon\'s "IgnoreRhosts" option is set, run the following command:
 
 # grep -i IgnoreRhosts /etc/ssh/sshd_config
 
